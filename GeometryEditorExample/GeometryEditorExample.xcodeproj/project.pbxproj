@@ -1,0 +1,548 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5128BA5D1B0D7AEC00743428 /* ArcGIS.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5128BA4E1B0D7AEC00743428 /* ArcGIS.bundle */; };
+		5128BA5E1B0D7AEC00743428 /* ControlPanel.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5128BA4F1B0D7AEC00743428 /* ControlPanel.xcassets */; };
+		5128BA5F1B0D7AEC00743428 /* CoreState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA511B0D7AEC00743428 /* CoreState.swift */; };
+		5128BA601B0D7AEC00743428 /* GeometryEditorCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA521B0D7AEC00743428 /* GeometryEditorCore.swift */; };
+		5128BA611B0D7AEC00743428 /* RingEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA531B0D7AEC00743428 /* RingEditor.swift */; };
+		5128BA621B0D7AEC00743428 /* GeometryEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA551B0D7AEC00743428 /* GeometryEditor.swift */; };
+		5128BA631B0D7AEC00743428 /* GeometryEditorPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA561B0D7AEC00743428 /* GeometryEditorPreferences.swift */; };
+		5128BA641B0D7AEC00743428 /* GeometryEditorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA571B0D7AEC00743428 /* GeometryEditorUtils.swift */; };
+		5128BA661B0D7AEC00743428 /* GeometryEditorRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA5A1B0D7AEC00743428 /* GeometryEditorRenderer.swift */; };
+		5128BA671B0D7AEC00743428 /* GeometryEditorSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA5B1B0D7AEC00743428 /* GeometryEditorSymbols.swift */; };
+		5128BA681B0D7AEC00743428 /* RendererState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128BA5C1B0D7AEC00743428 /* RendererState.swift */; };
+		51F1C6251B09C3EA00B816AD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F1C6241B09C3EA00B816AD /* main.m */; };
+		51F1C6281B09C3EA00B816AD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F1C6271B09C3EA00B816AD /* AppDelegate.m */; };
+		51F1C62B1B09C3EA00B816AD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F1C62A1B09C3EA00B816AD /* ViewController.m */; };
+		51F1C62E1B09C3EA00B816AD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51F1C62C1B09C3EA00B816AD /* Main.storyboard */; };
+		51F1C6301B09C3EA00B816AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51F1C62F1B09C3EA00B816AD /* Images.xcassets */; };
+		51F1C6331B09C3EA00B816AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51F1C6311B09C3EA00B816AD /* LaunchScreen.xib */; };
+		51F1C63F1B09C3EA00B816AD /* GeometryEditorExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F1C63E1B09C3EA00B816AD /* GeometryEditorExampleTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		51F1C6391B09C3EA00B816AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 51F1C6171B09C3EA00B816AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 51F1C61E1B09C3EA00B816AD;
+			remoteInfo = GeometryEditorExample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5128BA4C1B0D747900743428 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5128BA4E1B0D7AEC00743428 /* ArcGIS.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ArcGIS.bundle; sourceTree = "<group>"; };
+		5128BA4F1B0D7AEC00743428 /* ControlPanel.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ControlPanel.xcassets; sourceTree = "<group>"; };
+		5128BA511B0D7AEC00743428 /* CoreState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreState.swift; sourceTree = "<group>"; };
+		5128BA521B0D7AEC00743428 /* GeometryEditorCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryEditorCore.swift; sourceTree = "<group>"; };
+		5128BA531B0D7AEC00743428 /* RingEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingEditor.swift; sourceTree = "<group>"; };
+		5128BA541B0D7AEC00743428 /* GeometryEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditor.h; sourceTree = "<group>"; };
+		5128BA551B0D7AEC00743428 /* GeometryEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryEditor.swift; sourceTree = "<group>"; };
+		5128BA561B0D7AEC00743428 /* GeometryEditorPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryEditorPreferences.swift; sourceTree = "<group>"; };
+		5128BA571B0D7AEC00743428 /* GeometryEditorUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryEditorUtils.swift; sourceTree = "<group>"; };
+		5128BA5A1B0D7AEC00743428 /* GeometryEditorRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryEditorRenderer.swift; sourceTree = "<group>"; };
+		5128BA5B1B0D7AEC00743428 /* GeometryEditorSymbols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryEditorSymbols.swift; sourceTree = "<group>"; };
+		5128BA5C1B0D7AEC00743428 /* RendererState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererState.swift; sourceTree = "<group>"; };
+		51F1C61F1B09C3EA00B816AD /* GeometryEditorExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeometryEditorExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		51F1C6231B09C3EA00B816AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		51F1C6241B09C3EA00B816AD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		51F1C6261B09C3EA00B816AD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		51F1C6271B09C3EA00B816AD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		51F1C6291B09C3EA00B816AD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		51F1C62A1B09C3EA00B816AD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		51F1C62D1B09C3EA00B816AD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		51F1C62F1B09C3EA00B816AD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		51F1C6321B09C3EA00B816AD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		51F1C6381B09C3EA00B816AD /* GeometryEditorExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeometryEditorExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		51F1C63D1B09C3EA00B816AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		51F1C63E1B09C3EA00B816AD /* GeometryEditorExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditorExampleTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		51F1C61C1B09C3EA00B816AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51F1C6351B09C3EA00B816AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5128BA4D1B0D7AEC00743428 /* GeometryEditor */ = {
+			isa = PBXGroup;
+			children = (
+				5128BA4E1B0D7AEC00743428 /* ArcGIS.bundle */,
+				5128BA4F1B0D7AEC00743428 /* ControlPanel.xcassets */,
+				5128BA501B0D7AEC00743428 /* Core */,
+				5128BA541B0D7AEC00743428 /* GeometryEditor.h */,
+				5128BA551B0D7AEC00743428 /* GeometryEditor.swift */,
+				5128BA561B0D7AEC00743428 /* GeometryEditorPreferences.swift */,
+				5128BA571B0D7AEC00743428 /* GeometryEditorUtils.swift */,
+				5128BA591B0D7AEC00743428 /* Render */,
+			);
+			path = GeometryEditor;
+			sourceTree = "<group>";
+		};
+		5128BA501B0D7AEC00743428 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				5128BA511B0D7AEC00743428 /* CoreState.swift */,
+				5128BA521B0D7AEC00743428 /* GeometryEditorCore.swift */,
+				5128BA531B0D7AEC00743428 /* RingEditor.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		5128BA591B0D7AEC00743428 /* Render */ = {
+			isa = PBXGroup;
+			children = (
+				5128BA5A1B0D7AEC00743428 /* GeometryEditorRenderer.swift */,
+				5128BA5B1B0D7AEC00743428 /* GeometryEditorSymbols.swift */,
+				5128BA5C1B0D7AEC00743428 /* RendererState.swift */,
+			);
+			path = Render;
+			sourceTree = "<group>";
+		};
+		51F1C6161B09C3EA00B816AD = {
+			isa = PBXGroup;
+			children = (
+				51F1C6211B09C3EA00B816AD /* GeometryEditorExample */,
+				51F1C63B1B09C3EA00B816AD /* GeometryEditorExampleTests */,
+				51F1C6201B09C3EA00B816AD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		51F1C6201B09C3EA00B816AD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				51F1C61F1B09C3EA00B816AD /* GeometryEditorExample.app */,
+				51F1C6381B09C3EA00B816AD /* GeometryEditorExampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		51F1C6211B09C3EA00B816AD /* GeometryEditorExample */ = {
+			isa = PBXGroup;
+			children = (
+				5128BA4D1B0D7AEC00743428 /* GeometryEditor */,
+				51F1C6261B09C3EA00B816AD /* AppDelegate.h */,
+				51F1C6271B09C3EA00B816AD /* AppDelegate.m */,
+				51F1C6291B09C3EA00B816AD /* ViewController.h */,
+				51F1C62A1B09C3EA00B816AD /* ViewController.m */,
+				51F1C62C1B09C3EA00B816AD /* Main.storyboard */,
+				51F1C62F1B09C3EA00B816AD /* Images.xcassets */,
+				51F1C6311B09C3EA00B816AD /* LaunchScreen.xib */,
+				51F1C6221B09C3EA00B816AD /* Supporting Files */,
+			);
+			path = GeometryEditorExample;
+			sourceTree = "<group>";
+		};
+		51F1C6221B09C3EA00B816AD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				51F1C6231B09C3EA00B816AD /* Info.plist */,
+				51F1C6241B09C3EA00B816AD /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		51F1C63B1B09C3EA00B816AD /* GeometryEditorExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				51F1C63E1B09C3EA00B816AD /* GeometryEditorExampleTests.m */,
+				51F1C63C1B09C3EA00B816AD /* Supporting Files */,
+			);
+			path = GeometryEditorExampleTests;
+			sourceTree = "<group>";
+		};
+		51F1C63C1B09C3EA00B816AD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				51F1C63D1B09C3EA00B816AD /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		51F1C61E1B09C3EA00B816AD /* GeometryEditorExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 51F1C6421B09C3EA00B816AD /* Build configuration list for PBXNativeTarget "GeometryEditorExample" */;
+			buildPhases = (
+				51F1C61B1B09C3EA00B816AD /* Sources */,
+				51F1C61C1B09C3EA00B816AD /* Frameworks */,
+				51F1C61D1B09C3EA00B816AD /* Resources */,
+				5128BA4C1B0D747900743428 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GeometryEditorExample;
+			productName = GeometryEditorExample;
+			productReference = 51F1C61F1B09C3EA00B816AD /* GeometryEditorExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		51F1C6371B09C3EA00B816AD /* GeometryEditorExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 51F1C6451B09C3EA00B816AD /* Build configuration list for PBXNativeTarget "GeometryEditorExampleTests" */;
+			buildPhases = (
+				51F1C6341B09C3EA00B816AD /* Sources */,
+				51F1C6351B09C3EA00B816AD /* Frameworks */,
+				51F1C6361B09C3EA00B816AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				51F1C63A1B09C3EA00B816AD /* PBXTargetDependency */,
+			);
+			name = GeometryEditorExampleTests;
+			productName = GeometryEditorExampleTests;
+			productReference = 51F1C6381B09C3EA00B816AD /* GeometryEditorExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		51F1C6171B09C3EA00B816AD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = kingoit;
+				TargetAttributes = {
+					51F1C61E1B09C3EA00B816AD = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					51F1C6371B09C3EA00B816AD = {
+						CreatedOnToolsVersion = 6.3;
+						TestTargetID = 51F1C61E1B09C3EA00B816AD;
+					};
+				};
+			};
+			buildConfigurationList = 51F1C61A1B09C3EA00B816AD /* Build configuration list for PBXProject "GeometryEditorExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 51F1C6161B09C3EA00B816AD;
+			productRefGroup = 51F1C6201B09C3EA00B816AD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				51F1C61E1B09C3EA00B816AD /* GeometryEditorExample */,
+				51F1C6371B09C3EA00B816AD /* GeometryEditorExampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		51F1C61D1B09C3EA00B816AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51F1C62E1B09C3EA00B816AD /* Main.storyboard in Resources */,
+				51F1C6331B09C3EA00B816AD /* LaunchScreen.xib in Resources */,
+				5128BA5D1B0D7AEC00743428 /* ArcGIS.bundle in Resources */,
+				51F1C6301B09C3EA00B816AD /* Images.xcassets in Resources */,
+				5128BA5E1B0D7AEC00743428 /* ControlPanel.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51F1C6361B09C3EA00B816AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		51F1C61B1B09C3EA00B816AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5128BA5F1B0D7AEC00743428 /* CoreState.swift in Sources */,
+				51F1C62B1B09C3EA00B816AD /* ViewController.m in Sources */,
+				5128BA621B0D7AEC00743428 /* GeometryEditor.swift in Sources */,
+				5128BA601B0D7AEC00743428 /* GeometryEditorCore.swift in Sources */,
+				5128BA641B0D7AEC00743428 /* GeometryEditorUtils.swift in Sources */,
+				51F1C6281B09C3EA00B816AD /* AppDelegate.m in Sources */,
+				5128BA681B0D7AEC00743428 /* RendererState.swift in Sources */,
+				5128BA671B0D7AEC00743428 /* GeometryEditorSymbols.swift in Sources */,
+				5128BA611B0D7AEC00743428 /* RingEditor.swift in Sources */,
+				51F1C6251B09C3EA00B816AD /* main.m in Sources */,
+				5128BA631B0D7AEC00743428 /* GeometryEditorPreferences.swift in Sources */,
+				5128BA661B0D7AEC00743428 /* GeometryEditorRenderer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51F1C6341B09C3EA00B816AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51F1C63F1B09C3EA00B816AD /* GeometryEditorExampleTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		51F1C63A1B09C3EA00B816AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 51F1C61E1B09C3EA00B816AD /* GeometryEditorExample */;
+			targetProxy = 51F1C6391B09C3EA00B816AD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		51F1C62C1B09C3EA00B816AD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				51F1C62D1B09C3EA00B816AD /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		51F1C6311B09C3EA00B816AD /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				51F1C6321B09C3EA00B816AD /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		51F1C6401B09C3EA00B816AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		51F1C6411B09C3EA00B816AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		51F1C6431B09C3EA00B816AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/SDKs/ArcGIS/iOS/**";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INFOPLIST_FILE = GeometryEditorExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					ArcGIS,
+					"-l",
+					"c++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		51F1C6441B09C3EA00B816AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/SDKs/ArcGIS/iOS/**";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INFOPLIST_FILE = GeometryEditorExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					ArcGIS,
+					"-l",
+					"c++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		51F1C6461B09C3EA00B816AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = GeometryEditorExampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GeometryEditorExample.app/GeometryEditorExample";
+			};
+			name = Debug;
+		};
+		51F1C6471B09C3EA00B816AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = GeometryEditorExampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GeometryEditorExample.app/GeometryEditorExample";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		51F1C61A1B09C3EA00B816AD /* Build configuration list for PBXProject "GeometryEditorExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51F1C6401B09C3EA00B816AD /* Debug */,
+				51F1C6411B09C3EA00B816AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		51F1C6421B09C3EA00B816AD /* Build configuration list for PBXNativeTarget "GeometryEditorExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51F1C6431B09C3EA00B816AD /* Debug */,
+				51F1C6441B09C3EA00B816AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		51F1C6451B09C3EA00B816AD /* Build configuration list for PBXNativeTarget "GeometryEditorExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51F1C6461B09C3EA00B816AD /* Debug */,
+				51F1C6471B09C3EA00B816AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 51F1C6171B09C3EA00B816AD /* Project object */;
+}
