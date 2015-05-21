@@ -17,10 +17,10 @@ class RendererState: NSObject {
     }
     
     func refreshActiveVertex(render:GeometryEditorRenderer) {
-        if render.vertexMultiPointGraphicId == InvalidId {
-            render.vertexMultiPointGraphicId = render.addGraphic(render.core.ringEditor.getVertexMultiPoint(), attribute: GeometryEditorSymbols.NormalPointAttr, order: GeometryEditorRenderer.DRAW_ORDER_NORMAL_POINT)
+        if render.vertexMultiPointGraphic == nil {
+            render.vertexMultiPointGraphic = render.addGraphic(render.core.ringEditor.getVertexMultiPoint(), attribute: GeometryEditorSymbols.NormalPointAttr, order: GeometryEditorRenderer.DRAW_ORDER_NORMAL_POINT)
         }else {
-            render.updateGraphic(render.core.ringEditor.getVertexMultiPoint(), graphicId: render.vertexMultiPointGraphicId)
+            render.updateGraphic(render.core.ringEditor.getVertexMultiPoint(), graphic: render.vertexMultiPointGraphic!)
         }
     }
     
@@ -32,15 +32,15 @@ class RendererState: NSObject {
     
     func refreshActiveSelectionPoint(render:GeometryEditorRenderer) {
         if let point = render.sketchGraphicLayer.getSelectionPoint() {
-            if render.selectionPointGraphicId == InvalidId {
-                render.selectionPointGraphicId = render.addGraphic(point, attribute: GeometryEditorSymbols.SelectionAttr, order: GeometryEditorRenderer.DRAW_ORDER_SELECTION_POINT)
+            if render.selectionPointGraphic == nil {
+                render.selectionPointGraphic = render.addGraphic(point, attribute: GeometryEditorSymbols.SelectionAttr, order: GeometryEditorRenderer.DRAW_ORDER_SELECTION_POINT)
             }else {
-                render.updateGraphic(point, graphicId: render.selectionPointGraphicId)
+                render.updateGraphic(point, graphic: render.selectionPointGraphic!)
             }
         }else {
-            if render.selectionPointGraphicId != InvalidId {
-                render.removeGraphic(render.selectionPointGraphicId)
-                render.selectionPointGraphicId = InvalidId
+            if render.selectionPointGraphic != nil {
+                render.removeGraphic(render.selectionPointGraphic!)
+                render.selectionPointGraphic = nil
             }
         }
     }
@@ -68,10 +68,10 @@ class MultiPathRendererState: RendererState {
     
     override func refreshActiveMidPoint(render: GeometryEditorRenderer) {
         var geometry = getMidMultiPoint(render.core.ringEditor)
-        if render.midMultiPointGraphicId == InvalidId {
-            render.midMultiPointGraphicId = render.addGraphic(geometry, attribute: GeometryEditorSymbols.MidPointAttr, order: GeometryEditorRenderer.DRAW_ORDER_MID_POINT)
+        if render.midMultiPointGraphic == nil {
+            render.midMultiPointGraphic = render.addGraphic(geometry, attribute: GeometryEditorSymbols.MidPointAttr, order: GeometryEditorRenderer.DRAW_ORDER_MID_POINT)
         }else {
-            render.updateGraphic(geometry, graphicId: render.midMultiPointGraphicId)
+            render.updateGraphic(geometry, graphic: render.midMultiPointGraphic!)
         }
     }
     
@@ -89,25 +89,25 @@ class MultiPathRendererState: RendererState {
         }
         
         if let point = startPoint {
-            if render.startPointGraphicId == InvalidId {
-                render.startPointGraphicId = render.addGraphic(point, attribute: GeometryEditorSymbols.StartPointAttr, order: GeometryEditorRenderer.DRAW_ORDER_START_POINT)
+            if render.startPointGraphic == nil {
+                render.startPointGraphic = render.addGraphic(point, attribute: GeometryEditorSymbols.StartPointAttr, order: GeometryEditorRenderer.DRAW_ORDER_START_POINT)
             }else {
-                render.updateGraphic(point, graphicId: render.startPointGraphicId)
+                render.updateGraphic(point, graphic: render.startPointGraphic!)
             }
-        }else if render.startPointGraphicId != InvalidId {
-            render.removeGraphic(render.startPointGraphicId)
-            render.startPointGraphicId = InvalidId
+        }else if render.startPointGraphic != nil {
+            render.removeGraphic(render.startPointGraphic!)
+            render.startPointGraphic = nil
         }
         
         if let point = endPoint {
-            if render.endPointGraphicId == InvalidId {
-                render.endPointGraphicId = render.addGraphic(point, attribute: GeometryEditorSymbols.EndPointAttr, order: GeometryEditorRenderer.DRAW_ORDER_END_POINT)
+            if render.endPointGraphic == nil {
+                render.endPointGraphic = render.addGraphic(point, attribute: GeometryEditorSymbols.EndPointAttr, order: GeometryEditorRenderer.DRAW_ORDER_END_POINT)
             }else {
-                render.updateGraphic(point, graphicId: render.endPointGraphicId)
+                render.updateGraphic(point, graphic: render.endPointGraphic!)
             }
-        }else if render.endPointGraphicId != InvalidId {
-            render.removeGraphic(render.endPointGraphicId)
-            render.endPointGraphicId = InvalidId
+        }else if render.endPointGraphic != nil {
+            render.removeGraphic(render.endPointGraphic!)
+            render.endPointGraphic = nil
         }
     }
 }
@@ -115,20 +115,20 @@ class MultiPathRendererState: RendererState {
 class PolylineRendererState: MultiPathRendererState {
     override func refreshNonActive(render: GeometryEditorRenderer) {
         if let geometry = render.core.nonActiveGeometry {
-            if render.nonActiveGeometryGraphicId == InvalidId {
-                render.nonActiveGeometryGraphicId = render.addGraphic(geometry, attribute: GeometryEditorSymbols.NonActivePolylineAttr, order: GeometryEditorRenderer.DRAW_ORDER_NON_ACTIVE_GEOMETRY)
+            if render.nonActiveGeometryGraphic == nil {
+                render.nonActiveGeometryGraphic = render.addGraphic(geometry, attribute: GeometryEditorSymbols.NonActivePolylineAttr, order: GeometryEditorRenderer.DRAW_ORDER_NON_ACTIVE_GEOMETRY)
             }else {
-                render.updateGraphic(geometry, graphicId: render.nonActiveGeometryGraphicId)
+                render.updateGraphic(geometry, graphic: render.nonActiveGeometryGraphic!)
             }
         }
     }
     
     override func refreshActive(render: GeometryEditorRenderer) {
         var geometry = render.core.getActiveGeometry()
-        if render.activeGeometryGraphicId == InvalidId {
-            render.activeGeometryGraphicId = render.addGraphic(geometry, attribute: GeometryEditorSymbols.ActivePolylineAttr, order: GeometryEditorRenderer.DRAW_ORDER_MULTI_PATH)
+        if render.activeGeometryGraphic == nil {
+            render.activeGeometryGraphic = render.addGraphic(geometry, attribute: GeometryEditorSymbols.ActivePolylineAttr, order: GeometryEditorRenderer.DRAW_ORDER_MULTI_PATH)
         }else {
-            render.updateGraphic(geometry, graphicId: render.activeGeometryGraphicId)
+            render.updateGraphic(geometry, graphic: render.activeGeometryGraphic!)
         }
     }
     
@@ -140,24 +140,24 @@ class PolylineRendererState: MultiPathRendererState {
 class PolygonRendererState: MultiPathRendererState {
     override func refreshNonActive(render: GeometryEditorRenderer) {
         if let geometry = render.core.nonActiveGeometry {
-            if render.nonActiveGeometryGraphicId == InvalidId {
-                render.nonActiveGeometryGraphicId = render.addGraphic(geometry, attribute: GeometryEditorSymbols.NonActivePolygonAttr, order: GeometryEditorRenderer.DRAW_ORDER_NON_ACTIVE_GEOMETRY)
+            if render.nonActiveGeometryGraphic == nil {
+                render.nonActiveGeometryGraphic = render.addGraphic(geometry, attribute: GeometryEditorSymbols.NonActivePolygonAttr, order: GeometryEditorRenderer.DRAW_ORDER_NON_ACTIVE_GEOMETRY)
             }else {
-                render.updateGraphic(geometry, graphicId: render.nonActiveGeometryGraphicId)
+                render.updateGraphic(geometry, graphic: render.nonActiveGeometryGraphic!)
             }
         }
     }
     
     override func refreshActive(render: GeometryEditorRenderer) {
         var geometry = render.core.getActiveGeometry()
-        if render.activeGeometryGraphicId == InvalidId {
-            render.activeGeometryGraphicId = render.addGraphic(geometry, attribute: GeometryEditorSymbols.ActivePolygonAttr, order: GeometryEditorRenderer.DRAW_ORDER_MULTI_PATH)
+        if render.activeGeometryGraphic == nil {
+            render.activeGeometryGraphic = render.addGraphic(geometry, attribute: GeometryEditorSymbols.ActivePolygonAttr, order: GeometryEditorRenderer.DRAW_ORDER_MULTI_PATH)
         }else {
-            render.updateGraphic(geometry, graphicId: render.activeGeometryGraphicId)
+            render.updateGraphic(geometry, graphic: render.activeGeometryGraphic!)
         }
     }
     
     override func getMidMultiPoint(ringEditor: RingEditor)->AGSGeometry {
-        return ringEditor.getMidMultiPoint(false)
+        return ringEditor.getMidMultiPoint(true)
     }
 }

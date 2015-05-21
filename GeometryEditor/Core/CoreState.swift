@@ -93,7 +93,12 @@ class PolygonState: NSObject, CoreState {
         if mergeMode == GeometryMergeMode.Subtract {
             mergeGeometry = engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
         } else {
-            mergeGeometry = engine.unionGeometries([nonActiveGeometry, ringEditor.getPolygon()])
+            if !nonActiveGeometry.isEmpty() {
+                mergeGeometry = engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
+                mergeGeometry = engine.unionGeometries([mergeGeometry, ringEditor.getPolygon()])
+            }else {
+                mergeGeometry = engine.unionGeometries([nonActiveGeometry, ringEditor.getPolygon()])
+            }
         }
         core.nonActiveGeometry = mergeGeometry
         ringEditor.reset()

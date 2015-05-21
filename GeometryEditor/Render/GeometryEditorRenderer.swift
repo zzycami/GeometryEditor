@@ -9,8 +9,6 @@
 import UIKit
 import ArcGIS
 
-let InvalidId = -1
-
 class GeometryEditorRenderer: NSObject {
     
     //各部分图形绘图顺序
@@ -24,14 +22,14 @@ class GeometryEditorRenderer: NSObject {
     static let DRAW_ORDER_SELECTION_POINT = 6
     
     
-    var nonActiveGeometryGraphicId = InvalidId
-    var activeGeometryGraphicId = InvalidId
-    var vertexMultiPointGraphicId = InvalidId
-    var midMultiPointGraphicId = InvalidId
-    var startPointGraphicId = InvalidId
-    var endPointGraphicId = InvalidId
-    var selectionPointGraphicId = InvalidId
-    var nonActiveBufferGraphicId = InvalidId
+    var nonActiveGeometryGraphic:AGSGraphic?
+    var activeGeometryGraphic:AGSGraphic?
+    var vertexMultiPointGraphic:AGSGraphic?
+    var midMultiPointGraphic:AGSGraphic?
+    var startPointGraphic:AGSGraphic?
+    var endPointGraphic:AGSGraphic?
+    var selectionPointGraphic:AGSGraphic?
+    var nonActiveBufferGraphic:AGSGraphic?
     
     var sketchGraphicLayer:SketchGraphicsLayer
     var core:GeometryEditorCore
@@ -64,14 +62,14 @@ class GeometryEditorRenderer: NSObject {
     
     func clear() {
         sketchGraphicLayer.removeAllGraphics()
-        nonActiveGeometryGraphicId = InvalidId
-        activeGeometryGraphicId = InvalidId
-        vertexMultiPointGraphicId = InvalidId
-        midMultiPointGraphicId = InvalidId
-        startPointGraphicId = InvalidId
-        endPointGraphicId = InvalidId
-        selectionPointGraphicId = InvalidId
-        nonActiveBufferGraphicId = InvalidId
+        nonActiveGeometryGraphic = nil
+        activeGeometryGraphic = nil
+        vertexMultiPointGraphic = nil
+        midMultiPointGraphic = nil
+        startPointGraphic = nil
+        endPointGraphic = nil
+        selectionPointGraphic = nil
+        nonActiveBufferGraphic = nil
     }
     
     func refreshAll() {
@@ -121,34 +119,32 @@ class GeometryEditorRenderer: NSObject {
                 if !geometry.isEmpty() {
                     bufferGeometry = sketchGraphicLayer.bufferGeometryInternal(geometry)
                 }
-                if nonActiveBufferGraphicId == InvalidId {
-                    nonActiveBufferGraphicId = addGraphic(geometry, attribute: GeometryEditorSymbols.BufferAttr, order: GeometryEditorRenderer.DRAW_ORDER_BUFFER)
+                if nonActiveBufferGraphic == nil {
+                    nonActiveBufferGraphic = addGraphic(geometry, attribute: GeometryEditorSymbols.BufferAttr, order: GeometryEditorRenderer.DRAW_ORDER_BUFFER)
                 }else {
-                    updateGraphic(geometry, graphicId: nonActiveBufferGraphicId)
+                    updateGraphic(geometry, graphic: nonActiveBufferGraphic!)
                 }
             }
-        }else if nonActiveBufferGraphicId != InvalidId {
-            removeGraphic(nonActiveBufferGraphicId)
-            nonActiveBufferGraphicId = InvalidId
+        }else if nonActiveBufferGraphic != nil {
+            removeGraphic(nonActiveBufferGraphic!)
+            nonActiveBufferGraphic = nil
         }
     }
     
-    func addGraphic(geometry:AGSGeometry, attribute:[String:String], order:Int)->Int {
+    func addGraphic(geometry:AGSGeometry, attribute:[String:String], order:Int)->AGSGraphic {
         var graphic = AGSGraphic(geometry: geometry, symbol: nil, attributes: attribute)
         graphic.drawIndex = UInt(order)
         self.sketchGraphicLayer.addGraphic(graphic)
         self.sketchGraphicLayer.refresh()
-        return find(self.sketchGraphicLayer.graphics as! [AGSGraphic], graphic)!
+        return graphic
     }
     
-    func updateGraphic(geometry:AGSGeometry, graphicId:Int) {
-        var graphic = self.sketchGraphicLayer.graphics[graphicId] as! AGSGraphic
+    func updateGraphic(geometry:AGSGeometry, graphic:AGSGraphic) {
         graphic.geometry = geometry
         sketchGraphicLayer.refresh()
     }
     
-    func removeGraphic(graphicId:Int) {
-        var graphic = self.sketchGraphicLayer.graphics[graphicId] as! AGSGraphic
+    func removeGraphic(graphic:AGSGraphic) {
         self.sketchGraphicLayer.removeGraphic(graphic)
         self.sketchGraphicLayer.refresh()
     }

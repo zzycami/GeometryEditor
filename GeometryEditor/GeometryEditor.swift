@@ -78,6 +78,8 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             if controlPanel == nil {
                 setupBasicControlPanel()
             }
+            
+            self.touchable = true
         }
     }
     
@@ -94,6 +96,15 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         
         onPoint(mappoint)
     }
+    
+    public func mapView(mapView: AGSMapView!, didEndTapAndHoldAtPoint screen: CGPoint, mapPoint mappoint: AGSPoint!, graphics: [NSObject : AnyObject]!) {
+        if !touchable {
+            return
+        }
+        println("onSingleTap, mapPoint:\(mappoint), mode:\(currentMode), state:\(state)")
+        onPoint(mappoint)
+    }
+    
     
     private func onPoint(point:AGSPoint) {
         switch state {
@@ -125,7 +136,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     private func handleSelect(mapView:AGSMapView, point:AGSPoint)->Bool {
         var nearRadius = GeometryEditorPreferences.getNearRadius()
         var index = GeometryEditorUtils.getSelectIndex(point.x, y: point.y, points: core.ringEditor.getPoints(), mapView: mapView, nearRadius: nearRadius)
-        if index > 0 {
+        if index >= 0 {
             state = GeometryEditState.Move
             selectionPointIndex = index
         }else {
@@ -176,7 +187,13 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         }
     }
     
-    public var touchable:Bool = true
+    public var touchable:Bool! {
+        didSet {
+            if self.mapView != nil {
+                self.mapView.showMagnifierOnTapAndHold = touchable
+            }
+        }
+    }
     
     public var controlPanel:ControlPanel?
     
@@ -221,6 +238,34 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             geometryRender.refreshAll()
         }
         return true
+    }
+    
+    public func mergeAdd()->Bool {
+        if core.merge(GeometryMergeMode.Add) {
+            cancelSelectInternal()
+            geometryRender.refreshAll()
+            return true
+        }
+        return false
+    }
+    
+    public func mergeSubtract()->Bool {
+        if core.merge(GeometryMergeMode.Subtract) {
+            cancelSelectInternal()
+            geometryRender.refreshAll()
+            return true
+        }
+        return false
+    }
+    
+    public func removeCurSelect() {
+        if state != GeometryEditState.Move || selectionPointIndex < 0 {
+            return
+        }
+        core.remove(selectionPointIndex)
+        state = GeometryEditState.Normal
+        selectionPointIndex = -1
+        geometryRender.refreshActive()
     }
     
     //MARK: Private Method

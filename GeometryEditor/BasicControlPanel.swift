@@ -69,27 +69,27 @@ public class BasicControlPanel:ControlPanel {
         undoLabel.text = "撤销"
         
         gpsBtn.setImage(UIImage(named: "icon_control_gps"), forState: UIControlState.Normal)
-        gpsBtn.addTarget(self, action: "removeCurSelect:", forControlEvents: UIControlEvents.TouchUpInside)
+        gpsBtn.addTarget(self, action: "singleGps:", forControlEvents: UIControlEvents.TouchUpInside)
         gpsLabel.text = "GPS"
         
         coordinateInputBtn.setImage(UIImage(named: "icon_control_input"), forState: UIControlState.Normal)
-        coordinateInputBtn.addTarget(self, action: "removeCurSelect:", forControlEvents: UIControlEvents.TouchUpInside)
+        coordinateInputBtn.addTarget(self, action: "coordinateInput:", forControlEvents: UIControlEvents.TouchUpInside)
         coordinateInputLabel.text = "输入点"
         
         handDrawBtn.setImage(UIImage(named: "icon_hand_draw"), forState: UIControlState.Normal)
-        handDrawBtn.addTarget(self, action: "removeCurSelect:", forControlEvents: UIControlEvents.TouchUpInside)
+        handDrawBtn.addTarget(self, action: "startHandDraw:", forControlEvents: UIControlEvents.TouchUpInside)
         handDrawLabel.text = "手绘"
         
         pathRecordBtn.setImage(UIImage(named: "icon_control_path"), forState: UIControlState.Normal)
-        pathRecordBtn.addTarget(self, action: "removeCurSelect:", forControlEvents: UIControlEvents.TouchUpInside)
+        pathRecordBtn.addTarget(self, action: "startPathRecord:", forControlEvents: UIControlEvents.TouchUpInside)
         pathRecordLabel.text = "轨迹"
         
         mergeAddBtn.setImage(UIImage(named: "icon_control_add"), forState: UIControlState.Normal)
-        mergeAddBtn.addTarget(self, action: "removeCurSelect:", forControlEvents: UIControlEvents.TouchUpInside)
+        mergeAddBtn.addTarget(self, action: "mergeAdd:", forControlEvents: UIControlEvents.TouchUpInside)
         mergeAddLabel.text = "加"
         
         mergeSubtractBtn.setImage(UIImage(named: "icon_control_minus"), forState: UIControlState.Normal)
-        mergeSubtractBtn.addTarget(self, action: "removeCurSelect:", forControlEvents: UIControlEvents.TouchUpInside)
+        mergeSubtractBtn.addTarget(self, action: "mergeSubtract:", forControlEvents: UIControlEvents.TouchUpInside)
         mergeSubtractLabel.text = "减"
         
         bufferBtn.setImage(UIImage(named: "icon_control_oval"), forState: UIControlState.Normal)
@@ -152,6 +152,7 @@ public class BasicControlPanel:ControlPanel {
     }
     
     public func removeCurSelect(sender:UIButton) {
+        sketchGraphicsLayer.removeCurSelect()
     }
     
     public func singleGps(sender:UIButton) {
@@ -170,8 +171,10 @@ public class BasicControlPanel:ControlPanel {
     }
     
     public func mergeAdd(sender:UIButton) {
+        sketchGraphicsLayer.mergeAdd()
     }
     
     public func mergeSubtract(sender:UIButton) {
+        sketchGraphicsLayer.mergeSubtract()
     }
 }

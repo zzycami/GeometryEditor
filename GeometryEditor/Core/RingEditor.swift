@@ -135,7 +135,7 @@ class RingEditor: NSObject {
         }
         var pointA = updatePoints.first!
         var pointB:AGSPoint
-        for i in 1...(updatePoints.count - 1) {
+        for i in 1..<(updatePoints.count) {
             pointB = updatePoints[i]
             midPoints.append(RingEditor.getMidPoint(pointA, pointB: pointB, spatialReference: spatialReference))
             pointA = pointB
@@ -230,7 +230,7 @@ class RingEditor: NSObject {
     */
     func move(index:Int, point:AGSPoint, saveState:Bool)->UpdateOp? {
         var size = points.count
-        if midPoints.isEmpty {
+        if !midPoints.isEmpty {
             var midIndex = RingEditor.getRingIndex(index - 1, length: size)
             midPoints[midIndex] = RingEditor.getMidPoint(points[midIndex], pointB: point, spatialReference: spatialReference)
             
