@@ -293,10 +293,16 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             controlPanel.bindSketchGraphicLayer(self)
             
             self.mapView.addSubview(controlPanel.controlPanelView!)
+            var size = self.mapView.frame.size
+            var width = controlPanel.getControlPanelWidth()
+            var height = controlPanel.getControlPanelHeight()
+            if size.width < width {
+                width = size.width
+            }
             controlPanel.controlPanelView?.snp_makeConstraints({ (make) -> Void in
                 make.left.equalTo(self.mapView).offset(10)
-                make.top.equalTo(self.mapView).offset(20)
-                make.width.equalTo(controlPanel.getControlPanelWidth())
+                make.top.equalTo(self.mapView).offset(10)
+                make.width.equalTo(width)
                 make.height.equalTo(controlPanel.getControlPanelHeight())
             })
             

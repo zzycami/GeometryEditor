@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14E17e" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14E17e" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Q8X-zI-z3f">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
     </dependencies>
@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A6i-05-lKv" customClass="AGSMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -26,15 +26,37 @@
                             <constraint firstAttribute="bottom" secondItem="A6i-05-lKv" secondAttribute="bottom" id="5Xg-T5-Zgh"/>
                             <constraint firstItem="A6i-05-lKv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="8tn-x4-fhS"/>
                             <constraint firstAttribute="trailing" secondItem="A6i-05-lKv" secondAttribute="trailing" id="Tvb-Gc-EcS"/>
-                            <constraint firstItem="A6i-05-lKv" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="iyi-fl-qWR"/>
+                            <constraint firstItem="A6i-05-lKv" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="iyi-fl-qWR"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="l1g-9l-yTf">
+                        <barButtonItem key="rightBarButtonItem" title="开始图形编辑" id="MjL-rw-8GO"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="A6i-05-lKv" id="h6z-5A-f7d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1251" y="400"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="N1h-0B-PWQ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Q8X-zI-z3f" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gXL-dQ-sWi">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="R08-Nq-5c0"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Oxu-F7-Aq5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="439" y="1061"/>
         </scene>
     </scenes>
 </document>

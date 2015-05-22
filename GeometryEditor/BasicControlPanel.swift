@@ -68,10 +68,15 @@ public class BasicControlPanel:ControlPanel {
         
         labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, gpsLabel, coordinateInputLabel, handDrawLabel, pathRecordLabel, bufferLabel]
         
-        controlPanelView = UIView(frame: CGRectMake(0, 0, getControlPanelWidth(), getControlPanelHeight()))
+        
+        var contentSize = CGRectMake(0, 0, getControlPanelWidth(), getControlPanelHeight())
+        controlPanelView = UIView(frame: contentSize)
+        controlPanelView?.userInteractionEnabled = true
+        
         
         setupHandDrawButtons()
         handDrawBtnContainer = UIView(frame: CGRectZero)
+        handDrawBtnContainer.userInteractionEnabled = true
         controlPanelView!.addSubview(handDrawBtnContainer)
         handDrawBtnContainer.snp_makeConstraints({ (make) -> Void in
             make.edges.equalTo(self.controlPanelView!)
@@ -82,17 +87,14 @@ public class BasicControlPanel:ControlPanel {
         
         handDrawBtnContainer.hidden = true
         
-        
         setupButtons()
         btnContainer = UIView(frame: CGRectZero)
+        btnContainer.userInteractionEnabled = true
         controlPanelView!.addSubview(btnContainer)
         btnContainer.snp_makeConstraints({ (make) -> Void in
             make.edges.equalTo(self.controlPanelView!)
         })
         setupConstrains(buttons, labels: labels, containerView: btnContainer)
-        
-        
-        
     }
     
     private func setupHandDrawButtons() {
@@ -173,7 +175,7 @@ public class BasicControlPanel:ControlPanel {
                 prevView = button
             })
             
-            label.font = UIFont.systemFontOfSize(13)
+            label.font = UIFont.systemFontOfSize(12)
             label.textColor = UIColor.blueColor()
             label.textAlignment = NSTextAlignment.Center
             containerView.addSubview(label)
@@ -249,9 +251,11 @@ public class BasicControlPanel:ControlPanel {
         if show {
             handDrawBtnContainer.hidden = false
             btnContainer.hidden = true
+            controlPanelView?.bringSubviewToFront(btnContainer)
         }else {
             handDrawBtnContainer.hidden = true
             btnContainer.hidden = false
+            controlPanelView?.bringSubviewToFront(handDrawBtnContainer)
         }
         
     }
