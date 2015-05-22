@@ -49,5 +49,7 @@ public class ControlPanel: NSObject, GeometryEditorCallback {
     public func onStateChange(oldState: GeometryEditState, updateState: GeometryEditState) {
         
     }
-
+    
+    public func showHandDrawPanel(show:Bool) {
+    }
 }

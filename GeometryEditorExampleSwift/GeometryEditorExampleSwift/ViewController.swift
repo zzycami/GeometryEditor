@@ -15,6 +15,7 @@ class ViewController: UIViewController, AGSMapViewLayerDelegate, AGSLayerDelegat
     
     var sketchGraphicsLayer:SketchGraphicsLayer!
     
+    //@IBOutlet weak var canvasView: CanvasView!
     
     //MARK: Life Cycle
     override func viewDidLoad() {

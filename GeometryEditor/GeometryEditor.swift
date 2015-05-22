@@ -80,6 +80,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             }
             
             self.touchable = true
+            self.handDrawModule = HandDrawModule(sketchGraphicsLayer: self)
         }
     }
     
@@ -197,8 +198,10 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     
     public var controlPanel:ControlPanel?
     
+    internal var handDrawModule:HandDrawModule?
     
-    // Public Method
+    
+    //MARK: Public Method
     public func getSelectionPoint()->AGSPoint? {
         if selectionPointIndex < 0 {
             return nil
@@ -265,6 +268,12 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         core.remove(selectionPointIndex)
         state = GeometryEditState.Normal
         selectionPointIndex = -1
+        geometryRender.refreshActive()
+    }
+    
+    public func setActivePoints(points:[AGSPoint]) {
+        cancelSelectInternal()
+        core.setActiveGeometry(points)
         geometryRender.refreshActive()
     }
     

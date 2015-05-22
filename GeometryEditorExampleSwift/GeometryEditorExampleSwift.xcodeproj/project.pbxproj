@@ -46,6 +46,9 @@
 		51EDC8C31B0DABE5008379C3 /* EdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EDC8B91B0DABE5008379C3 /* EdgeInsets.swift */; };
 		51EDC8C41B0DABE5008379C3 /* LayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EDC8BA1B0DABE5008379C3 /* LayoutConstraint.swift */; };
 		51EDC8C51B0DABE5008379C3 /* View+Snap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EDC8BB1B0DABE5008379C3 /* View+Snap.swift */; };
+		51EDC8CB1B0EBFF7008379C3 /* BufferModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EDC8CA1B0EBFF7008379C3 /* BufferModalController.swift */; };
+		51EDC8CE1B0ECA73008379C3 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EDC8CD1B0ECA73008379C3 /* CanvasView.swift */; };
+		51EDC8D01B0ECBF7008379C3 /* HandDrawModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EDC8CF1B0ECBF7008379C3 /* HandDrawModule.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +106,9 @@
 		51EDC8B91B0DABE5008379C3 /* EdgeInsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeInsets.swift; sourceTree = "<group>"; };
 		51EDC8BA1B0DABE5008379C3 /* LayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutConstraint.swift; sourceTree = "<group>"; };
 		51EDC8BB1B0DABE5008379C3 /* View+Snap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Snap.swift"; sourceTree = "<group>"; };
+		51EDC8CA1B0EBFF7008379C3 /* BufferModalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferModalController.swift; sourceTree = "<group>"; };
+		51EDC8CD1B0ECA73008379C3 /* CanvasView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CanvasView.swift; path = HandDraw/CanvasView.swift; sourceTree = "<group>"; };
+		51EDC8CF1B0ECBF7008379C3 /* HandDrawModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HandDrawModule.swift; path = HandDraw/HandDrawModule.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +219,7 @@
 		5128BAC81B0D8F2900743428 /* GeometryEditor */ = {
 			isa = PBXGroup;
 			children = (
+				51EDC8CC1B0ECA43008379C3 /* HandDraw */,
 				51EDC8B01B0DABE5008379C3 /* Snap */,
 				5128BAC91B0D8F2900743428 /* ArcGIS.bundle */,
 				5128BACA1B0D8F2900743428 /* ControlPanel.xcassets */,
@@ -223,6 +230,7 @@
 				51EDC8AE1B0DAB3B008379C3 /* BasicControlPanel.swift */,
 				5128BAD11B0D8F2900743428 /* GeometryEditorPreferences.swift */,
 				5128BAD21B0D8F2900743428 /* GeometryEditorUtils.swift */,
+				51EDC8CA1B0EBFF7008379C3 /* BufferModalController.swift */,
 				5128BAD31B0D8F2900743428 /* Info.plist */,
 				5128BAD41B0D8F2900743428 /* Render */,
 			);
@@ -271,6 +279,15 @@
 				51EDC8BB1B0DABE5008379C3 /* View+Snap.swift */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		51EDC8CC1B0ECA43008379C3 /* HandDraw */ = {
+			isa = PBXGroup;
+			children = (
+				51EDC8CD1B0ECA73008379C3 /* CanvasView.swift */,
+				51EDC8CF1B0ECBF7008379C3 /* HandDrawModule.swift */,
+			);
+			name = HandDraw;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -377,6 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5128BAE21B0D8F2900743428 /* GeometryEditorSymbols.swift in Sources */,
+				51EDC8CB1B0EBFF7008379C3 /* BufferModalController.swift in Sources */,
 				51EDC8BF1B0DABE5008379C3 /* ConstraintAttributes.swift in Sources */,
 				51EDC8C31B0DABE5008379C3 /* EdgeInsets.swift in Sources */,
 				5128BAE31B0D8F2900743428 /* RendererState.swift in Sources */,
@@ -391,11 +409,13 @@
 				51EDC8AD1B0DA853008379C3 /* ControlPanel.swift in Sources */,
 				51EDC8AF1B0DAB3B008379C3 /* BasicControlPanel.swift in Sources */,
 				51EDC8C51B0DABE5008379C3 /* View+Snap.swift in Sources */,
+				51EDC8CE1B0ECA73008379C3 /* CanvasView.swift in Sources */,
 				51EDC8C11B0DABE5008379C3 /* ConstraintMaker.swift in Sources */,
 				5128BADE1B0D8F2900743428 /* GeometryEditorPreferences.swift in Sources */,
 				5128BA781B0D7D0900743428 /* AppDelegate.swift in Sources */,
 				5128BADC1B0D8F2900743428 /* RingEditor.swift in Sources */,
 				5128BADD1B0D8F2900743428 /* GeometryEditor.swift in Sources */,
+				51EDC8D01B0ECBF7008379C3 /* HandDrawModule.swift in Sources */,
 				5128BADB1B0D8F2900743428 /* GeometryEditorCore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

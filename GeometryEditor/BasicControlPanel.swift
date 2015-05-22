@@ -42,6 +42,15 @@ public class BasicControlPanel:ControlPanel {
     private var btnContainer:UIView = UIView(frame: CGRectZero)
     private var handDrawBtnContainer:UIView = UIView(frame: CGRectZero)
     
+    private var handDrawCompleteBtn:UIButton = UIButton(frame: CGRectZero)
+    private var handDrawCompleteLabel:UILabel = UILabel(frame: CGRectZero)
+    
+    private var handDrawCancelBtn:UIButton = UIButton(frame: CGRectZero)
+    private var handDrawCancelLabel:UILabel = UILabel(frame: CGRectZero)
+    
+    private var handDrawClearBtn:UIButton = UIButton(frame: CGRectZero)
+    private var handDrawClearLabel:UILabel = UILabel(frame: CGRectZero)
+    
     public init() {
         super.init(controlPanelView: nil)
         setupView()
@@ -55,7 +64,52 @@ public class BasicControlPanel:ControlPanel {
     public let buttonWidth:CGFloat = 39
     
     private func setupView() {
+        buttons = [undoBtn, mergeAddBtn, mergeSubtractBtn,  deselectBtn, removeBtn, gpsBtn, coordinateInputBtn, handDrawBtn, pathRecordBtn, bufferBtn]
         
+        labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, gpsLabel, coordinateInputLabel, handDrawLabel, pathRecordLabel, bufferLabel]
+        
+        controlPanelView = UIView(frame: CGRectMake(0, 0, getControlPanelWidth(), getControlPanelHeight()))
+        
+        setupHandDrawButtons()
+        handDrawBtnContainer = UIView(frame: CGRectZero)
+        controlPanelView!.addSubview(handDrawBtnContainer)
+        handDrawBtnContainer.snp_makeConstraints({ (make) -> Void in
+            make.edges.equalTo(self.controlPanelView!)
+        })
+        var handDrawButtons = [handDrawClearBtn, handDrawCancelBtn, handDrawCompleteBtn]
+        var handDrawLabels = [handDrawClearLabel, handDrawCancelLabel, handDrawCompleteLabel]
+        setupConstrains(handDrawButtons, labels: labels, containerView: handDrawBtnContainer)
+        
+        handDrawBtnContainer.hidden = true
+        
+        
+        setupButtons()
+        btnContainer = UIView(frame: CGRectZero)
+        controlPanelView!.addSubview(btnContainer)
+        btnContainer.snp_makeConstraints({ (make) -> Void in
+            make.edges.equalTo(self.controlPanelView!)
+        })
+        setupConstrains(buttons, labels: labels, containerView: btnContainer)
+        
+        
+        
+    }
+    
+    private func setupHandDrawButtons() {
+        handDrawCompleteBtn.setImage(UIImage(named: "icon_control_save"), forState: UIControlState.Normal)
+        handDrawCompleteBtn.addTarget(self, action: "handDrawComplete:", forControlEvents: UIControlEvents.TouchUpInside)
+        handDrawCompleteLabel.text = "完成"
+        
+        handDrawCancelBtn.setImage(UIImage(named: "icon_control_cancer"), forState: UIControlState.Normal)
+        handDrawCancelBtn.addTarget(self, action: "handDrawCancel:", forControlEvents: UIControlEvents.TouchUpInside)
+        handDrawCancelLabel.text = "取消"
+        
+        handDrawClearBtn.setImage(UIImage(named: "icon_control_delete"), forState: UIControlState.Normal)
+        handDrawClearBtn.addTarget(self, action: "handDrawClear:", forControlEvents: UIControlEvents.TouchUpInside)
+        handDrawClearLabel.text = "清除"
+    }
+    
+    private func setupButtons() {
         deselectBtn.setImage(UIImage(named: "icon_control_cancer"), forState: UIControlState.Normal)
         deselectBtn.addTarget(self, action: "cancelSelect:", forControlEvents: UIControlEvents.TouchUpInside)
         deselectLabel.text = "取消"
@@ -93,15 +147,11 @@ public class BasicControlPanel:ControlPanel {
         mergeSubtractLabel.text = "减"
         
         bufferBtn.setImage(UIImage(named: "icon_control_oval"), forState: UIControlState.Normal)
-        bufferBtn.addTarget(self, action: "removeCurSelect:", forControlEvents: UIControlEvents.TouchUpInside)
+        bufferBtn.addTarget(self, action: "buffer:", forControlEvents: UIControlEvents.TouchUpInside)
         bufferLabel.text = "缓冲区"
-        
-        buttons = [undoBtn, mergeAddBtn, mergeSubtractBtn,  deselectBtn, removeBtn, gpsBtn, coordinateInputBtn, handDrawBtn, pathRecordBtn, bufferBtn]
-        
-        labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, gpsLabel, coordinateInputLabel, handDrawLabel, pathRecordLabel, bufferLabel]
-        
-        controlPanelView = UIView(frame: CGRectMake(0, 0, getControlPanelWidth(), getControlPanelHeight()))
-        
+    }
+    
+    private func setupConstrains(buttons:[UIButton], labels:[UILabel], containerView:UIView) {
         var prevView:UIView?
         for i in 0..<(buttons.count) {
             var button = buttons[i]
@@ -110,23 +160,23 @@ public class BasicControlPanel:ControlPanel {
             button.setBackgroundImage(UIImage(named: "background_control_selected"), forState: UIControlState.Normal)
             button.setBackgroundImage(UIImage(named: "background_control_normal"), forState: UIControlState.Highlighted)
             
-            controlPanelView?.addSubview(button)
+            containerView.addSubview(button)
             button.snp_makeConstraints({ (make) -> Void in
                 if let view = prevView {
                     make.leading.equalTo(view.snp_trailing).offset(self.padding)
                 }else {
-                    make.leading.equalTo(self.controlPanelView!)
+                    make.leading.equalTo(containerView)
                 }
                 make.width.equalTo(self.buttonWidth)
                 make.height.equalTo(self.buttonWidth)
-                make.centerY.equalTo(self.controlPanelView!).offset(10)
+                make.centerY.equalTo(containerView).offset(10)
                 prevView = button
             })
             
             label.font = UIFont.systemFontOfSize(13)
             label.textColor = UIColor.blueColor()
             label.textAlignment = NSTextAlignment.Center
-            controlPanelView?.addSubview(label)
+            containerView.addSubview(label)
             label.snp_makeConstraints({ (make) -> Void in
                 make.centerX.equalTo(button)
                 make.top.equalTo(button.snp_bottom)
@@ -162,12 +212,17 @@ public class BasicControlPanel:ControlPanel {
     }
     
     public func startHandDraw(sender:UIButton) {
+        sketchGraphicsLayer.handDrawModule?.start()
     }
     
     public func startPathRecord(sender:UIButton) {
     }
     
     public func buffer(sender:UIButton) {
+        var bufferModalController = BufferModalController()
+        bufferModalController.sketchGraphicsLayer = sketchGraphicsLayer
+        bufferModalController.modalPresentationStyle = UIModalPresentationStyle.Popover
+        UIApplication.sharedApplication()
     }
     
     public func mergeAdd(sender:UIButton) {
@@ -176,5 +231,28 @@ public class BasicControlPanel:ControlPanel {
     
     public func mergeSubtract(sender:UIButton) {
         sketchGraphicsLayer.mergeSubtract()
+    }
+    
+    public func handDrawComplete(sender:UIButton) {
+        sketchGraphicsLayer.handDrawModule?.complete()
+    }
+    
+    public func handDrawCancel(sender:UIButton) {
+        sketchGraphicsLayer.handDrawModule?.stop()
+    }
+    
+    public func handDrawClear(sender:UIButton) {
+        sketchGraphicsLayer.handDrawModule?.clear()
+    }
+    
+    public override func showHandDrawPanel(show: Bool) {
+        if show {
+            handDrawBtnContainer.hidden = false
+            btnContainer.hidden = true
+        }else {
+            handDrawBtnContainer.hidden = true
+            btnContainer.hidden = false
+        }
+        
     }
 }
