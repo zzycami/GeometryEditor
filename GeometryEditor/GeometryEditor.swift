@@ -284,6 +284,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         }
         attach()
         touchable = true
+        isStart = true
         geometryEditorCallBack?.onStart()
     }
     

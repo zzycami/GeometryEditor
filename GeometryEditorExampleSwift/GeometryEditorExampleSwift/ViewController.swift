@@ -28,6 +28,16 @@ class ViewController: UIViewController, AGSMapViewLayerDelegate, AGSLayerDelegat
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func onEditPressed(sender: UIBarButtonItem) {
+        if sketchGraphicsLayer.isStart {
+            sender.title = "开始图形编辑"
+            sketchGraphicsLayer.stop()
+        }else {
+            sender.title = "停止图形编辑"
+            sketchGraphicsLayer.start()
+        }
+    }
 
     
     //MARK:Private Method

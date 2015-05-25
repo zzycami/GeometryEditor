@@ -16,7 +16,7 @@ public class ControlPanel: NSObject, GeometryEditorCallback {
     public var visible:Bool = false {
         didSet {
             if let view = self.controlPanelView {
-                view.hidden = visible
+                view.hidden = !visible
             }
         }
     }
@@ -30,6 +30,7 @@ public class ControlPanel: NSObject, GeometryEditorCallback {
     internal func bindSketchGraphicLayer(sketchGraphicsLayer:SketchGraphicsLayer) {
         self.sketchGraphicsLayer = sketchGraphicsLayer
         self.sketchGraphicsLayer.geometryEditorCallBack = self
+        self.controlPanelView?.hidden = true
     }
     
     

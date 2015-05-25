@@ -30,7 +30,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="l1g-9l-yTf">
-                        <barButtonItem key="rightBarButtonItem" title="开始图形编辑" id="MjL-rw-8GO"/>
+                        <barButtonItem key="rightBarButtonItem" title="开始图形编辑" id="MjL-rw-8GO">
+                            <connections>
+                                <action selector="onEditPressed:" destination="BYZ-38-t0r" id="s40-Hb-Joe"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="A6i-05-lKv" id="h6z-5A-f7d"/>
