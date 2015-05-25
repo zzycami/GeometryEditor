@@ -79,7 +79,6 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
                 setupBasicControlPanel()
             }
             
-            self.touchable = true
             self.handDrawModule = HandDrawModule(sketchGraphicsLayer: self)
         }
     }
@@ -167,7 +166,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     private var state:GeometryEditState = GeometryEditState.Normal {
         didSet {
             if oldValue != state {
-                // TODO: notify state change
+                geometryEditorCallBack?.onStateChange(oldValue, updateState: state)
             }
         }
     }
@@ -188,13 +187,15 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         }
     }
     
-    public var touchable:Bool! {
+    public var touchable:Bool = false {
         didSet {
             if self.mapView != nil {
                 self.mapView.showMagnifierOnTapAndHold = touchable
             }
         }
     }
+    
+    public var isStart = false
     
     public var controlPanel:ControlPanel?
     
@@ -277,6 +278,77 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         geometryRender.refreshActive()
     }
     
+    public func start() {
+        if isStart {
+            return
+        }
+        attach()
+        touchable = true
+        geometryEditorCallBack?.onStart()
+    }
+    
+    public func stop() {
+        if !isStart {
+            return
+        }
+        detach()
+        touchable = false
+        resetState()
+        isStart = false
+        geometryEditorCallBack?.onStop()
+    }
+    
+    public func reset() {
+        resetState()
+        resetData()
+        geometryEditorCallBack?.onReset()
+    }
+    
+    public func resetState() {
+        if state == GeometryEditState.Normal {
+            return
+        }
+        switch state {
+        case .Insert:
+            selectionPointIndex = -1
+            break;
+        case .Move:
+            selectionPointIndex = -1
+            break;
+        default:
+            break
+        }
+        state = GeometryEditState.Normal
+        geometryRender.refreshActiveSelectionPoint()
+    }
+    
+    public func attach() {
+        geometryEditorHost?.onGeometryEditorAttach(self)
+    }
+    
+    public func detach() {
+        geometryEditorHost?.onGeometryEditorDetach(self)
+    }
+    
+    public func getActiveGeometry()->AGSGeometry {
+        return core.getActiveGeometry()
+    }
+    
+    public func getNonActiveGeometry()->AGSGeometry? {
+        return core.nonActiveGeometry
+    }
+    
+    public func getGeometry()->AGSGeometry {
+        return core.getGeometry()
+    }
+    
+    public func getBufferGeometry()->AGSPolygon? {
+        if core.isEmpty() {
+            return nil
+        }
+        return bufferGeometryInternal(core.getGeometry())
+    }
+    
     //MARK: Private Method
     private func cancelSelectInternal()->Bool {
         if state != GeometryEditState.Insert && state != GeometryEditState.Move {
@@ -285,6 +357,11 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         state = GeometryEditState.Normal
         selectionPointIndex = -1
         return true
+    }
+    
+    private func resetData() {
+        core.clear()
+        geometryRender.clear()
     }
     
     private func setupBasicControlPanel() {
@@ -301,8 +378,8 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             }
             controlPanel.controlPanelView?.snp_makeConstraints({ (make) -> Void in
                 make.left.equalTo(self.mapView).offset(10)
-                make.top.equalTo(self.mapView).offset(10)
-                make.width.equalTo(width)
+                make.top.equalTo(self.mapView).offset(5)
+                make.right.equalTo(self.mapView).offset(-10)
                 make.height.equalTo(controlPanel.getControlPanelHeight())
             })
             

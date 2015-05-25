@@ -39,7 +39,7 @@ public class BasicControlPanel:ControlPanel {
     public var bufferBtn:UIButton = UIButton(frame: CGRectZero)
     public var bufferLabel:UILabel = UILabel(frame: CGRectZero)
     
-    private var btnContainer:UIView = UIView(frame: CGRectZero)
+    private var btnContainer:UIScrollView = UIScrollView(frame: CGRectZero)
     private var handDrawBtnContainer:UIView = UIView(frame: CGRectZero)
     
     private var handDrawCompleteBtn:UIButton = UIButton(frame: CGRectZero)
@@ -69,8 +69,8 @@ public class BasicControlPanel:ControlPanel {
         labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, gpsLabel, coordinateInputLabel, handDrawLabel, pathRecordLabel, bufferLabel]
         
         
-        var contentSize = CGRectMake(0, 0, getControlPanelWidth(), getControlPanelHeight())
-        controlPanelView = UIView(frame: contentSize)
+        
+        controlPanelView = UIView(frame: CGRectZero)
         controlPanelView?.userInteractionEnabled = true
         
         
@@ -88,7 +88,10 @@ public class BasicControlPanel:ControlPanel {
         handDrawBtnContainer.hidden = true
         
         setupButtons()
-        btnContainer = UIView(frame: CGRectZero)
+        btnContainer = UIScrollView(frame: CGRectZero)
+        var contentSize = CGSizeMake(getControlPanelWidth(), getControlPanelHeight())
+        btnContainer.contentSize = contentSize
+        btnContainer.showsHorizontalScrollIndicator = false
         btnContainer.userInteractionEnabled = true
         controlPanelView!.addSubview(btnContainer)
         btnContainer.snp_makeConstraints({ (make) -> Void in
@@ -171,7 +174,7 @@ public class BasicControlPanel:ControlPanel {
                 }
                 make.width.equalTo(self.buttonWidth)
                 make.height.equalTo(self.buttonWidth)
-                make.centerY.equalTo(containerView).offset(10)
+                make.top.equalTo(containerView)
                 prevView = button
             })
             
