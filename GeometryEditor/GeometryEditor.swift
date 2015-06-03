@@ -199,7 +199,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     
     public var controlPanel:ControlPanel?
     
-    internal var handDrawModule:HandDrawModule?
+    public var handDrawModule:HandDrawModule?
     
     
     //MARK: Public Method
@@ -379,7 +379,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             }
             controlPanel.controlPanelView?.snp_makeConstraints({ (make) -> Void in
                 make.left.equalTo(self.mapView).offset(10)
-                make.top.equalTo(self.mapView).offset(5)
+                make.top.equalTo(self.mapView).offset(50)
                 make.right.equalTo(self.mapView).offset(-10)
                 make.height.equalTo(controlPanel.getControlPanelHeight())
             })

@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "icon_control_delete.png"
+      "filename" : "merge_subtract.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "icon_control_delete@2x.png"
+      "filename" : "merge_subtract@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "icon_control_delete@3x.png"
+      "filename" : "merge_subtract@3x.png"
     }
   ],
   "info" : {

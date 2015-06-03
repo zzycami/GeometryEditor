@@ -9,7 +9,7 @@
 import UIKit
 import ArcGIS
 
-class GeometryEditorUtils: NSObject {
+public class GeometryEditorUtils: NSObject {
     /**
     Get the distance's squre of two point
     
@@ -18,7 +18,7 @@ class GeometryEditorUtils: NSObject {
     :param: x2 x of the second point
     :param: y2 y of the second point
     */
-    static func pointDistSq(x1:Double, y1:Double, x2:Double, y2:Double)->Double {
+    public static func pointDistSq(x1:Double, y1:Double, x2:Double, y2:Double)->Double {
         return (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)
     }
     
@@ -33,7 +33,7 @@ class GeometryEditorUtils: NSObject {
     
     :returns: the nearest point's index, if the value is -1 means do not exist such point
     */
-    static func getSelectIndex(x:Double, y:Double, points:[AGSPoint], mapView:AGSMapView, nearRadius:Int)->Int {
+    public static func getSelectIndex(x:Double, y:Double, points:[AGSPoint], mapView:AGSMapView, nearRadius:Int)->Int {
         if points.count <= 0 {
             return -1
         }
@@ -66,11 +66,11 @@ class GeometryEditorUtils: NSObject {
     
     :returns:
     */
-    static func isNear(distSq:Double, nearRadius:Int, resolution:Double)->Bool {
+    public static func isNear(distSq:Double, nearRadius:Int, resolution:Double)->Bool {
         return distSq < Double(nearRadius)*Double(nearRadius)*resolution*resolution
     }
     
-    static func pointsToMultiPolygon(points:[AGSPoint], inout outMultiPolygon:AGSMutablePolygon) {
+    public static func pointsToMultiPolygon(points:[AGSPoint], inout outMultiPolygon:AGSMutablePolygon) {
         if points.isEmpty {
             return
         }
@@ -80,7 +80,7 @@ class GeometryEditorUtils: NSObject {
         }
     }
     
-    static func pointsToMultiPolyline(points:[AGSPoint], inout outMultiPolyline:AGSMutablePolyline) {
+    public static func pointsToMultiPolyline(points:[AGSPoint], inout outMultiPolyline:AGSMutablePolyline) {
         if points.isEmpty {
             return
         }
@@ -90,7 +90,7 @@ class GeometryEditorUtils: NSObject {
         }
     }
     
-    static func pointsToMultiPoint(points:[AGSPoint], inout outMultiPoint:AGSMutableMultipoint) {
+    public static func pointsToMultiPoint(points:[AGSPoint], inout outMultiPoint:AGSMutableMultipoint) {
         if points.isEmpty {
             return
         }
@@ -99,7 +99,7 @@ class GeometryEditorUtils: NSObject {
         }
     }
     
-    static func polygonToPoints(polygon:AGSPolygon, pathIndex:Int)->[AGSPoint] {
+    public static func polygonToPoints(polygon:AGSPolygon, pathIndex:Int)->[AGSPoint] {
         var points:[AGSPoint] = []
         var count:Int
         if pathIndex < 0 {
@@ -113,7 +113,15 @@ class GeometryEditorUtils: NSObject {
         return points
     }
     
-    static func polylineToPoints(polyline:AGSPolyline, pathIndex:Int)->[AGSPoint] {
+    public static func polygonToPoints(polygon:AGSPolygon)->[AGSPoint] {
+        var points:[AGSPoint] = []
+        for var i = 0;i < polygon.numRings; i++ {
+            points += self.polygonToPoints(polygon, pathIndex: i)
+        }
+        return points;
+    }
+    
+    public static func polylineToPoints(polyline:AGSPolyline, pathIndex:Int)->[AGSPoint] {
         var points:[AGSPoint] = []
         var count:Int
         if pathIndex < 0 {
@@ -127,11 +135,36 @@ class GeometryEditorUtils: NSObject {
         return points
     }
     
-    static func multiPointToPoints(multiPoint:AGSMultipoint)->[AGSPoint] {
+    public static func polylineToPoints(polyline:AGSPolyline)->[AGSPoint] {
+        var points:[AGSPoint] = []
+        for var i = 0;i < polyline.numPaths; i++ {
+            points += self.polylineToPoints(polyline, pathIndex: i)
+        }
+        return points;
+    }
+    
+    public static func multiPointToPoints(multiPoint:AGSMultipoint)->[AGSPoint] {
         var points:[AGSPoint] = []
         for var i = 0;i < multiPoint.numPoints; i++ {
             points.append(multiPoint.pointAtIndex(i))
         }
         return points
     }
+    
+    
+    
+    public static func geometryToPoints(geometry:AGSGeometry)->[AGSPoint] {
+        if geometry.isKindOfClass(AGSPoint) {
+            return [geometry as! AGSPoint]
+        }else if geometry.isKindOfClass(AGSPolyline) {
+            return self.polylineToPoints(geometry as! AGSPolyline)
+        }else if geometry.isKindOfClass(AGSPolygon) {
+            return self.polygonToPoints(geometry as! AGSPolygon)
+        }else if geometry.isKindOfClass(AGSMultipoint) {
+            return self.multiPointToPoints(geometry as! AGSMultipoint)
+        }else {
+            return []
+        }
+    }
+    
 }

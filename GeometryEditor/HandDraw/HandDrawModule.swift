@@ -9,18 +9,18 @@
 import UIKit
 import ArcGIS
 
-class HandDrawModule: NSObject {
+public class HandDrawModule: NSObject {
     var sketchGraphicsLayer:SketchGraphicsLayer
     
     var canvasView:CanvasView = CanvasView(frame: CGRectZero)
     
     var isStart = false
     
-    init(sketchGraphicsLayer:SketchGraphicsLayer) {
+    public init(sketchGraphicsLayer:SketchGraphicsLayer) {
         self.sketchGraphicsLayer = sketchGraphicsLayer
     }
     
-    func start() {
+    public func start() {
         var subviews = sketchGraphicsLayer.mapView.subviews as! [UIView]
         if let index = find(subviews, canvasView) {
             canvasView.enable = true
@@ -38,7 +38,7 @@ class HandDrawModule: NSObject {
         isStart = true
     }
     
-    func stop() {
+    public func stop() {
         if !isStart {
             return
         }
@@ -48,11 +48,11 @@ class HandDrawModule: NSObject {
         isStart = false
     }
     
-    func clear() {
+    public func clear() {
         canvasView.reset()
     }
     
-    func complete() {
+    public func complete() {
         var points = canvasView.points
         if !points.isEmpty {
             var esriPoints = thinning(points)

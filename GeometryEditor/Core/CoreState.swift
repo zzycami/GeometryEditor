@@ -82,8 +82,8 @@ class PolygonState: NSObject, CoreState {
     }
     
     func merge( core: GeometryEditorCore, mergeMode: GeometryMergeMode) -> Bool {
-        var nonActiveGeometry = core.nonActiveGeometry as! AGSPolygon
-        if mergeMode == GeometryMergeMode.Subtract && nonActiveGeometry.isEmpty() {
+        var nonActiveGeometry = core.nonActiveGeometry as? AGSPolygon
+        if mergeMode == GeometryMergeMode.Subtract && (nonActiveGeometry != nil && nonActiveGeometry!.isEmpty()) {
             return false
         }
         core.addHistory()
@@ -93,11 +93,11 @@ class PolygonState: NSObject, CoreState {
         if mergeMode == GeometryMergeMode.Subtract {
             mergeGeometry = engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
         } else {
-            if !nonActiveGeometry.isEmpty() {
+            if nonActiveGeometry != nil &&  !nonActiveGeometry!.isEmpty() {
                 mergeGeometry = engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
                 mergeGeometry = engine.unionGeometries([mergeGeometry, ringEditor.getPolygon()])
             }else {
-                mergeGeometry = engine.unionGeometries([nonActiveGeometry, ringEditor.getPolygon()])
+                mergeGeometry = ringEditor.getPolygon()
             }
         }
         core.nonActiveGeometry = mergeGeometry
@@ -106,16 +106,24 @@ class PolygonState: NSObject, CoreState {
     }
     
     func getGeometry( core: GeometryEditorCore, mergeMode: GeometryMergeMode) -> AGSGeometry {
-        var nonActiveGeometry = core.nonActiveGeometry as! AGSPolygon
+        var nonActiveGeometry = core.nonActiveGeometry as? AGSPolygon
         var ringEditor = core.ringEditor
         if ringEditor.isEmpty() {
-            return nonActiveGeometry.copy() as! AGSGeometry
+            if let geometry = nonActiveGeometry {
+                return geometry.copy() as! AGSGeometry
+            }else {
+                return self.createGeometry(core.spatialReference)
+            }
         }
         var engine = AGSGeometryEngine.defaultGeometryEngine()
         if mergeMode == GeometryMergeMode.Subtract {
             return engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
         }else {
-            return engine.unionGeometries([nonActiveGeometry, ringEditor.getPolygon()])
+            if let geometry = nonActiveGeometry{
+                return engine.unionGeometries([geometry, ringEditor.getPolygon()])
+            }else {
+                return ringEditor.getPolygon()
+            }
         }
     }
     
