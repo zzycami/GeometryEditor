@@ -350,6 +350,18 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         return bufferGeometryInternal(core.getGeometry())
     }
     
+    public func setGeometry(geometry:AGSGeometry) {
+        reset()
+        core.setGeometry(geometry)
+        geometryRender.refreshAll()
+    }
+    
+    public func setPoints(points:[AGSPoint]) {
+        reset()
+        core.setPoints(points)
+        geometryRender.refreshAll()
+    }
+    
     //MARK: Private Method
     private func cancelSelectInternal()->Bool {
         if state != GeometryEditState.Insert && state != GeometryEditState.Move {

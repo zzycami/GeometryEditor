@@ -170,20 +170,20 @@ class PolylineState: NSObject, CoreState {
         if !checkGeometry(geometry) {
             return false
         }
-        var nonActiveGeometry = core.nonActiveGeometry as! AGSPolyline
+        var nonActiveGeometry = core.nonActiveGeometry as? AGSPolyline
         if geometry.isEmpty() {
             nonActiveGeometry = AGSMutablePolyline(spatialReference: core.spatialReference)
         }else {
             var simplifyGeometry = AGSGeometryEngine.defaultGeometryEngine().simplifyGeometry(geometry)
             if simplifyGeometry.isValid() {
                 core.nonActiveGeometry = simplifyGeometry
-                nonActiveGeometry = simplifyGeometry as! AGSPolyline
+                nonActiveGeometry = simplifyGeometry as? AGSPolyline
             }else {
-                nonActiveGeometry = geometry.copy() as! AGSPolyline
+                nonActiveGeometry = geometry.copy() as? AGSPolyline
             }
         }
         
-        if nonActiveGeometry.numPaths == 1 {
+        if nonActiveGeometry?.numPaths == 1 {
             changeActivePath(core, pathIndex: 0)
         }
         return true
