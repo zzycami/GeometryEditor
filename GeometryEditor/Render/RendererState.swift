@@ -115,10 +115,12 @@ class MultiPathRendererState: RendererState {
 class PolylineRendererState: MultiPathRendererState {
     override func refreshNonActive(render: GeometryEditorRenderer) {
         if let geometry = render.core.nonActiveGeometry {
-            if render.nonActiveGeometryGraphic == nil {
-                render.nonActiveGeometryGraphic = render.addGraphic(geometry, attribute: GeometryEditorSymbols.NonActivePolylineAttr, order: GeometryEditorRenderer.DRAW_ORDER_NON_ACTIVE_GEOMETRY)
-            }else {
-                render.updateGraphic(geometry, graphic: render.nonActiveGeometryGraphic!)
+            if geometry.isValid() {
+                if render.nonActiveGeometryGraphic == nil {
+                    render.nonActiveGeometryGraphic = render.addGraphic(geometry, attribute: GeometryEditorSymbols.NonActivePolylineAttr, order: GeometryEditorRenderer.DRAW_ORDER_NON_ACTIVE_GEOMETRY)
+                }else {
+                    render.updateGraphic(geometry, graphic: render.nonActiveGeometryGraphic!)
+                }
             }
         }
     }
