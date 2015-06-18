@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class BasicControlPanel:ControlPanel {
+public class BasicControlPanel:ControlPanel, LocationUtilsDelegate{
     public var deselectBtn:UIButton = UIButton(frame: CGRectZero)
     private var deselectLabel:UILabel = UILabel(frame: CGRectZero)
     
@@ -51,9 +51,19 @@ public class BasicControlPanel:ControlPanel {
     private var handDrawClearBtn:UIButton = UIButton(frame: CGRectZero)
     private var handDrawClearLabel:UILabel = UILabel(frame: CGRectZero)
     
+    private var locationUtils:LocationUtils!
+    private var isSingleLocating = false
+    private var isPathRecord = false
+    
     public init() {
         super.init(controlPanelView: nil)
         setupView()
+    }
+    
+    override func bindSketchGraphicLayer(sketchGraphicsLayer: SketchGraphicsLayer) {
+        super.bindSketchGraphicLayer(sketchGraphicsLayer)
+        locationUtils = LocationUtils(mapView: sketchGraphicsLayer.mapView)
+        locationUtils.delegate = self
     }
     
     private var buttons:[UIButton] = []
@@ -61,14 +71,12 @@ public class BasicControlPanel:ControlPanel {
     
     public var padding:CGFloat = 5
     
-    public let buttonWidth:CGFloat = 39
+    public let buttonWidth:CGFloat = 45
     
     private func setupView() {
-        buttons = [undoBtn, mergeAddBtn, mergeSubtractBtn,  deselectBtn, removeBtn, gpsBtn, coordinateInputBtn, handDrawBtn, pathRecordBtn, bufferBtn]
+        buttons = [undoBtn, mergeAddBtn, mergeSubtractBtn,  deselectBtn, removeBtn, coordinateInputBtn, gpsBtn, pathRecordBtn,handDrawBtn, bufferBtn]
         
-        labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, gpsLabel, coordinateInputLabel, handDrawLabel, pathRecordLabel, bufferLabel]
-        
-        
+        labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, coordinateInputLabel, gpsLabel, pathRecordLabel,handDrawLabel, bufferLabel]
         
         controlPanelView = UIView(frame: CGRectZero)
         controlPanelView?.userInteractionEnabled = true
@@ -83,7 +91,7 @@ public class BasicControlPanel:ControlPanel {
         })
         var handDrawButtons = [handDrawClearBtn, handDrawCancelBtn, handDrawCompleteBtn]
         var handDrawLabels = [handDrawClearLabel, handDrawCancelLabel, handDrawCompleteLabel]
-        setupConstrains(handDrawButtons, labels: labels, containerView: handDrawBtnContainer)
+        setupConstrains(handDrawButtons, labels: handDrawLabels, containerView: handDrawBtnContainer)
         
         handDrawBtnContainer.hidden = true
         
@@ -162,8 +170,9 @@ public class BasicControlPanel:ControlPanel {
             var button = buttons[i]
             var label = labels[i]
             
-            button.setBackgroundImage(UIImage(named: "background_control_selected"), forState: UIControlState.Normal)
+            button.setBackgroundImage(UIImage(named: "background_control_selected_phone"), forState: UIControlState.Normal)
             button.setBackgroundImage(UIImage(named: "background_control_normal"), forState: UIControlState.Highlighted)
+            button.setBackgroundImage(UIImage(named: "background_control_selecte"), forState: UIControlState.Selected)
             
             containerView.addSubview(button)
             button.snp_makeConstraints({ (make) -> Void in
@@ -178,9 +187,10 @@ public class BasicControlPanel:ControlPanel {
                 prevView = button
             })
             
-            label.font = UIFont.systemFontOfSize(12)
-            label.textColor = UIColor.blueColor()
+            label.font = UIFont.boldSystemFontOfSize(14)
+            label.textColor = UIColor.colorWithRGB(0x35bbf0)
             label.textAlignment = NSTextAlignment.Center
+            
             containerView.addSubview(label)
             label.snp_makeConstraints({ (make) -> Void in
                 make.centerX.equalTo(button)
@@ -211,9 +221,45 @@ public class BasicControlPanel:ControlPanel {
     }
     
     public func singleGps(sender:UIButton) {
+        isSingleLocating = true
+        setAllButtonEnable(false)
+        locationUtils.startLocate()
     }
     
     public func coordinateInput(sender:UIButton) {
+        var pointInputView = PointInputView(frame: CGRectZero)
+        pointInputView.mapView = self.sketchGraphicsLayer.mapView
+        
+        var alertViewController = SDCAlertController(title: "输入坐标", message: "", preferredStyle: SDCAlertControllerStyle.Alert)
+        var cancelAction = SDCAlertAction(title: "取消", style: SDCAlertActionStyle.Cancel) { (alertAction:SDCAlertAction!) -> Void in
+            
+        }
+        
+        var finishAction = SDCAlertAction(title: "确定", style: SDCAlertActionStyle.Default) { (alertAction:SDCAlertAction!) -> Void in
+            if let point = pointInputView.point {
+                if self.sketchGraphicsLayer.mapView.maxEnvelope.containsPoint(point) {
+                    self.sketchGraphicsLayer.onPoint(point)
+                    self.sketchGraphicsLayer.mapView.centerAtPoint(point, animated: true)
+                }else {
+                    var alertView = UIAlertView(title: "", message: "超出地图范围", delegate: nil, cancelButtonTitle: "确定")
+                    alertView.show()
+                }
+            }else {
+                var alertView = UIAlertView(title: "", message: "输入的数字必须是数字", delegate: nil, cancelButtonTitle: "确定")
+                alertView.show()
+            }
+        }
+        alertViewController.addAction(cancelAction)
+        alertViewController.addAction(finishAction)
+        
+        
+        alertViewController.contentView.addSubview(pointInputView)
+        pointInputView.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(alertViewController.contentView)
+        }
+        alertViewController.presentWithCompletion { () -> Void in
+            
+        }
     }
     
     public func startHandDraw(sender:UIButton) {
@@ -221,13 +267,46 @@ public class BasicControlPanel:ControlPanel {
     }
     
     public func startPathRecord(sender:UIButton) {
+        if isPathRecord {
+            self.pathRecordBtn.selected = false
+            locationUtils.stopLocate()
+            setAllButtonEnable(true)
+        }else {
+            sketchGraphicsLayer.cancelSelect()
+            setAllButtonEnable(false)
+            self.pathRecordBtn.enabled = true
+            self.pathRecordBtn.selected = true
+            locationUtils.startLocate()
+        }
+        isPathRecord = !isPathRecord
     }
     
     public func buffer(sender:UIButton) {
-        var bufferModalController = BufferModalController()
-        bufferModalController.sketchGraphicsLayer = sketchGraphicsLayer
-        bufferModalController.modalPresentationStyle = UIModalPresentationStyle.Popover
-        UIApplication.sharedApplication()
+        var bufferModalView:BufferModalView = BufferModalView(frame: CGRectZero)
+        bufferModalView.sketchGraphicsLayer = self.sketchGraphicsLayer
+        
+        var alertViewController = SDCAlertController(title: "缓冲区设置", message: "", preferredStyle: SDCAlertControllerStyle.Alert)
+        var cancelAction = SDCAlertAction(title: "取消", style: SDCAlertActionStyle.Cancel, handler: nil)
+        
+        var finishAction = SDCAlertAction(title: "确定", style: SDCAlertActionStyle.Default) { (alertAction:SDCAlertAction!) -> Void in
+            self.sketchGraphicsLayer.isBufferEnable = bufferModalView.bufferEnanleSwitch.on
+            self.bufferBtn.selected = self.sketchGraphicsLayer.isBufferEnable
+            self.sketchGraphicsLayer.bufferRadius = Double(bufferModalView.radiusSlider.value)
+        }
+        
+        bufferModalView.bufferEnanleSwitch.on = self.sketchGraphicsLayer.isBufferEnable
+        bufferModalView.radiusLabel.text = String(format: "%.2f 米", arguments: [self.sketchGraphicsLayer.bufferRadius])
+        bufferModalView.radiusSlider.value = Float(self.sketchGraphicsLayer.bufferRadius)
+        
+        alertViewController.addAction(cancelAction)
+        alertViewController.addAction(finishAction)
+        
+        
+        alertViewController.contentView.addSubview(bufferModalView)
+        bufferModalView.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(alertViewController.contentView)
+        }
+        alertViewController.presentWithCompletion(nil)
     }
     
     public func mergeAdd(sender:UIButton) {
@@ -261,5 +340,181 @@ public class BasicControlPanel:ControlPanel {
             controlPanelView?.bringSubviewToFront(handDrawBtnContainer)
         }
         
+    }
+    
+    public func setAllButtonEnable(enable:Bool) {
+        for button in self.buttons {
+            button.enabled = enable
+        }
+    }
+    
+    public func locationUtils(utils: LocationUtils!, didUpdateToPoint point: AGSPoint!) {
+        if isSingleLocating {
+            setAllButtonEnable(true)
+            isSingleLocating = false
+            
+            if point == nil {
+                var alertView = UIAlertView(title: "", message: "定位失败", delegate: nil, cancelButtonTitle: "确定")
+                alertView.show()
+            }else {
+                sketchGraphicsLayer.onPoint(point)
+                sketchGraphicsLayer.mapView.centerAtPoint(point, animated: true)
+            }
+            
+            utils.stopLocate()
+        }
+        
+        if isPathRecord {
+            if point != nil {
+                sketchGraphicsLayer.onPoint(point)
+            }
+        }
+    }
+}
+
+class PointInputView:UIView {
+    var xValueTextField:UITextField = UITextField(frame: CGRectZero)
+    
+    var yValueTextField:UITextField = UITextField(frame: CGRectZero)
+    
+    var padding = 5
+    
+    var mapView:AGSMapView?
+    
+    var point:AGSPoint? {
+        if let spatialReference = self.mapView?.spatialReference {
+            if isNumber(xValueTextField.text) && isNumber(yValueTextField.text){
+                var formatter = NSNumberFormatter()
+                var xValue = formatter.numberFromString(xValueTextField.text)!.doubleValue
+                var yValue = formatter.numberFromString(yValueTextField.text)!.doubleValue
+                return AGSPoint(x: xValue, y: yValue, spatialReference: spatialReference)
+            }
+        }
+        return nil
+    }
+    
+    func isNumber(str:String)->Bool {
+        var isInt = isPureInt(str)
+        var isDecimal = isPureDecimal(str)
+        return isInt || isDecimal
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupPointInputView()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupPointInputView()
+    }
+    
+    func setupPointInputView() {
+        xValueTextField.placeholder = "X 坐标"
+        yValueTextField.placeholder = "Y 坐标"
+        
+        xValueTextField.borderStyle = UITextBorderStyle.RoundedRect
+        xValueTextField.font = UIFont.systemFontOfSize(12)
+        xValueTextField.keyboardType = UIKeyboardType.DecimalPad
+        
+        yValueTextField.borderStyle = UITextBorderStyle.RoundedRect
+        yValueTextField.font = UIFont.systemFontOfSize(12)
+        yValueTextField.keyboardType = UIKeyboardType.DecimalPad
+        
+        self.addSubview(xValueTextField)
+        self.addSubview(yValueTextField)
+        
+        xValueTextField.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(self).offset(self.padding)
+            make.trailing.equalTo(self).offset(-self.padding)
+            make.top.equalTo(self)
+            make.height.equalTo(40)
+        }
+        
+        yValueTextField.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(self).offset(self.padding)
+            make.trailing.equalTo(self).offset(-self.padding)
+            make.top.equalTo(self.xValueTextField.snp_bottom).offset(self.padding)
+            make.height.equalTo(40)
+            make.bottom.equalTo(self).offset(-self.padding)
+        }
+    }
+    
+    func isPureInt(string:String)->Bool {
+        var scan = NSScanner(string: string)
+        var intValue:Int = 0
+        return scan.scanInteger(&intValue) && scan.atEnd
+    }
+    
+    func isPureDecimal(string:String)->Bool {
+        var scan = NSScanner(string: string)
+        var floatValue: Float = 0
+        return scan.scanFloat(&floatValue) && scan.atEnd
+    }
+
+}
+
+
+class BufferModalView: UIView {
+    //MARK:Properties
+    var bufferEnanleSwitch:UISwitch = UISwitch(frame: CGRectZero)
+    
+    var radiusSlider:UISlider = UISlider(frame: CGRectZero)
+    
+    var radiusLabel:UILabel = UILabel(frame: CGRectZero)
+    
+    var sketchGraphicsLayer:SketchGraphicsLayer?
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        customView()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        customView()
+    }
+    
+    private func customView(){
+        addSubview(bufferEnanleSwitch)
+        addSubview(radiusSlider)
+        addSubview(radiusLabel)
+        
+        
+        if let layer = sketchGraphicsLayer {
+            bufferEnanleSwitch.on = layer.isBufferEnable
+        }
+        
+        radiusSlider.maximumValue = 10000
+        radiusSlider.value = 0
+        radiusSlider.addTarget(self, action: "bufferRaiudsChanges:", forControlEvents: UIControlEvents.ValueChanged)
+        
+        radiusLabel.text = "0 米"
+        radiusLabel.font = UIFont.systemFontOfSize(14)
+        
+        setupConstraints()
+    }
+    
+    func bufferRaiudsChanges(sender:UISlider) {
+        radiusLabel.text = "\(sender.value) 米"
+    }
+    
+    func setupConstraints() {
+        bufferEnanleSwitch.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(self).offset(5)
+            make.top.equalTo(self).offset(5)
+        }
+        
+        radiusLabel.snp_makeConstraints { (make) -> Void in
+            make.trailing.equalTo(self).offset(-5)
+            make.centerY.equalTo(self.bufferEnanleSwitch)
+        }
+        
+        radiusSlider.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(self).offset(5)
+            make.trailing.equalTo(self).offset(-5)
+            make.top.equalTo(self.bufferEnanleSwitch.snp_bottom).offset(10)
+            make.bottom.equalTo(self).offset(-20)
+        }
     }
 }

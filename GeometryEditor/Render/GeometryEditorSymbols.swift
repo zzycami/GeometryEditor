@@ -11,8 +11,8 @@ import ArcGIS
 
 extension UIColor {
     class func colorWithRGB(value:Int)->UIColor {
-        var redValue = CGFloat(value & 0xFF0000 >> 16)/255.0;
-        var greenValue = CGFloat(value & 0x00FF00 >> 8)/255.0;
+        var redValue = CGFloat((value & 0xFF0000) >> 16)/255.0;
+        var greenValue = CGFloat((value & 0x00FF00) >> 8)/255.0;
         var blueValue = CGFloat(value & 0x0000FF)/255.0;
         return UIColor(red: redValue, green: greenValue, blue: blueValue, alpha: 1);
     }

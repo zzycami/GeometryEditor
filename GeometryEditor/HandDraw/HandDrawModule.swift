@@ -57,6 +57,7 @@ public class HandDrawModule: NSObject {
         if !points.isEmpty {
             var esriPoints = thinning(points)
             sketchGraphicsLayer.setActivePoints(esriPoints)
+            sketchGraphicsLayer.geometryEditorDelegate?.onFinishEditGeometry?(sketchGraphicsLayer, geometry: sketchGraphicsLayer.getGeometry())
         }
         stop()
     }

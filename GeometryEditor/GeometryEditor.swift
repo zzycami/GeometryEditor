@@ -10,28 +10,52 @@ import UIKit
 import ArcGIS
 
 
-@objc public enum GeometryMergeMode:Int {
+@objc
+public enum GeometryMergeMode:Int {
     case Add
     case Subtract
 }
 
-@objc public enum GeometryEditState:Int {
+@objc
+public enum GeometryEditState:Int {
     case Normal
     case Insert
     case Move
 }
 
-@objc public enum GeometryTypeMode:Int {
+@objc
+public enum GeometryTypeMode:Int {
     case Point
     case Polygon
     case Polyline
 }
 
-@objc public protocol GeometryEditorCallback:NSObjectProtocol {
+public func GeometryTypeModeToEsriGeometryType(geometryTypeMode:GeometryTypeMode)->AGSGeometryType {
+    switch geometryTypeMode {
+    case .Point:
+        return AGSGeometryType.Point
+    case .Polygon:
+        return AGSGeometryType.Polygon
+    case .Polyline:
+        return AGSGeometryType.Polyline
+    }
+}
+
+@objc
+public protocol GeometryEditorCallback:NSObjectProtocol {
     func onStart()
     func onStop()
     func onReset()
     func onStateChange(oldState:GeometryEditState, updateState:GeometryEditState)
+}
+
+@objc
+public protocol GeometryEditorDelegate:NSObjectProtocol {
+    optional func onStartEditGeometry(sketchGraphicsLayer:SketchGraphicsLayer)
+    
+    optional func onEditingGeometry(sketchGraphicsLayer:SketchGraphicsLayer, geometry:AGSGeometry, point:AGSPoint)
+    
+    optional func onFinishEditGeometry(sketchGraphicsLayer:SketchGraphicsLayer, geometry:AGSGeometry)
 }
 
 
@@ -106,7 +130,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     }
     
     
-    private func onPoint(point:AGSPoint) {
+    public func onPoint(point:AGSPoint) {
         switch state {
         case .Normal:
             normalOnPoint(point)
@@ -119,6 +143,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             break
         }
         geometryRender.refreshActive()
+        geometryEditorDelegate?.onEditingGeometry?(self, geometry: getGeometry(), point: point)
     }
     
     private func normalOnPoint(point:AGSPoint) {
@@ -127,6 +152,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     
     private func insertOnPoint(point:AGSPoint) {
         core.add(selectionPointIndex, point: point)
+        self.state = GeometryEditState.Move
     }
     
     private func moveOnPoint(point:AGSPoint) {
@@ -153,6 +179,8 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     }
     
     //MARK: Property
+    public var geometryEditorDelegate:GeometryEditorDelegate?
+    
     public var geometryEditorHost:GeometryEditorHost?
     
     public var geometryEditorCallBack:GeometryEditorCallback?
@@ -214,9 +242,20 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         }
     }
     
-    public func bufferGeometryInternal(geometry:AGSGeometry)->AGSMutablePolygon {
+    
+    
+    private let DISTANCE_PER_DEGREE:Double = 111000
+    public func bufferGeometryInternal(geometry:AGSGeometry)->AGSMutablePolygon? {
+        if !isBufferEnable {
+            return nil
+        }
         var engine = AGSGeometryEngine.defaultGeometryEngine()
-        return engine.bufferGeometry(geometry, byDistance: bufferRadius)
+        var radius = self.bufferRadius
+        if mapView.spatialReference.isWGS84() {
+            radius = self.bufferRadius / DISTANCE_PER_DEGREE
+            //self.mapView.spatialReference.convertValue(10, fromUnit: AGSSRUnit.UnitMeter)
+        }
+        return engine.bufferGeometry(geometry, byDistance: radius)
     }
     
     public func cancelSelect() {
@@ -286,6 +325,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         touchable = true
         isStart = true
         geometryEditorCallBack?.onStart()
+        geometryEditorDelegate?.onStartEditGeometry?(self)
     }
     
     public func stop() {
@@ -297,6 +337,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         resetState()
         isStart = false
         geometryEditorCallBack?.onStop()
+        geometryEditorDelegate?.onFinishEditGeometry?(self, geometry: getGeometry())
     }
     
     public func reset() {
@@ -340,6 +381,10 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     }
     
     public func getGeometry()->AGSGeometry {
+        var bufferGeometry = getBufferGeometry()
+        if isBufferEnable && bufferGeometry != nil {
+            return bufferGeometry!
+        }
         return core.getGeometry()
     }
     
@@ -391,7 +436,11 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             }
             controlPanel.controlPanelView?.snp_makeConstraints({ (make) -> Void in
                 make.left.equalTo(self.mapView).offset(10)
-                make.top.equalTo(self.mapView).offset(50)
+                if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone {
+                    make.top.equalTo(self.mapView).offset(50)
+                }else {
+                    make.top.equalTo(self.mapView).offset(10)
+                }
                 make.right.equalTo(self.mapView).offset(-10)
                 make.height.equalTo(controlPanel.getControlPanelHeight())
             })

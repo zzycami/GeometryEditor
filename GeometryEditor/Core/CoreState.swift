@@ -91,7 +91,11 @@ class PolygonState: NSObject, CoreState {
         var mergeGeometry:AGSGeometry
         var engine = AGSGeometryEngine.defaultGeometryEngine()
         if mergeMode == GeometryMergeMode.Subtract {
-            mergeGeometry = engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
+            if nonActiveGeometry != nil &&  !nonActiveGeometry!.isEmpty() {
+                mergeGeometry = engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
+            }else {
+                mergeGeometry = createGeometry(core.spatialReference)
+            }
         } else {
             if nonActiveGeometry != nil &&  !nonActiveGeometry!.isEmpty() {
                 mergeGeometry = engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
@@ -119,8 +123,12 @@ class PolygonState: NSObject, CoreState {
         if mergeMode == GeometryMergeMode.Subtract {
             return engine.differenceOfGeometry(nonActiveGeometry, andGeometry: ringEditor.getPolygon())
         }else {
-            if let geometry = nonActiveGeometry{
-                return engine.unionGeometries([geometry, ringEditor.getPolygon()])
+            if let geometry = nonActiveGeometry {
+                if geometry.isValid() {
+                    return engine.unionGeometries([geometry, ringEditor.getPolygon()])
+                }else {
+                    return ringEditor.getPolygon()
+                }
             }else {
                 return ringEditor.getPolygon()
             }

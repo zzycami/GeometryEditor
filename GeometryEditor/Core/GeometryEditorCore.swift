@@ -17,11 +17,11 @@ enum GeometryEditorUndoState {
 }
 
 class HistoryData: NSObject {
-    var geometry:AGSGeometry
+    var geometry:AGSGeometry?
     var points:[AGSPoint]
     var mergeMode:GeometryMergeMode
     
-    init(geometry:AGSGeometry, points:[AGSPoint], mergeMode:GeometryMergeMode) {
+    init(geometry:AGSGeometry?, points:[AGSPoint], mergeMode:GeometryMergeMode) {
         self.geometry = geometry
         self.points = points
         self.mergeMode = mergeMode
@@ -60,7 +60,8 @@ class GeometryEditorCore: NSObject {
             currentState = PolylineState()
             break
         }
-        nonActiveGeometry = currentState.createGeometry(spatialReference)
+        //nonActiveGeometry = currentState.createGeometry(spatialReference)
+
         currentMergeMode = GeometryMergeMode.Add
         coreHistoryStack.removeAll(keepCapacity: false)
     }
@@ -142,7 +143,7 @@ class GeometryEditorCore: NSObject {
     }
     
     func addHistory() {
-        coreHistoryStack.append(HistoryData(geometry: nonActiveGeometry!.copy() as! AGSGeometry, points: ringEditor.getPoints(), mergeMode: currentMergeMode))
+        coreHistoryStack.append(HistoryData(geometry: nonActiveGeometry?.copy() as? AGSGeometry, points: ringEditor.getPoints(), mergeMode: currentMergeMode))
     }
     
     func add(index:Int, point:AGSPoint) {
@@ -170,7 +171,11 @@ class GeometryEditorCore: NSObject {
     }
     
     func isEmpty()->Bool {
-        return ringEditor.isEmpty() && (nonActiveGeometry == nil || nonActiveGeometry!.isEmpty())
+        if let geometry = self.nonActiveGeometry {
+            return ringEditor.isEmpty() && (nonActiveGeometry == nil || geometry.isEmpty())
+        }else {
+            return ringEditor.isEmpty() && nonActiveGeometry == nil
+        }
     }
     
     func setActiveGeometry(points:[AGSPoint]) {

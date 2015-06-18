@@ -119,10 +119,12 @@ class GeometryEditorRenderer: NSObject {
                 if !geometry.isEmpty() {
                     bufferGeometry = sketchGraphicLayer.bufferGeometryInternal(geometry)
                 }
-                if nonActiveBufferGraphic == nil {
-                    nonActiveBufferGraphic = addGraphic(geometry, attribute: GeometryEditorSymbols.BufferAttr, order: GeometryEditorRenderer.DRAW_ORDER_BUFFER)
-                }else {
-                    updateGraphic(geometry, graphic: nonActiveBufferGraphic!)
+                if bufferGeometry != nil {
+                    if nonActiveBufferGraphic == nil {
+                        nonActiveBufferGraphic = addGraphic(bufferGeometry!, attribute: GeometryEditorSymbols.BufferAttr, order: GeometryEditorRenderer.DRAW_ORDER_BUFFER)
+                    }else {
+                        updateGraphic(bufferGeometry!, graphic: nonActiveBufferGraphic!)
+                    }
                 }
             }
         }else if nonActiveBufferGraphic != nil {
