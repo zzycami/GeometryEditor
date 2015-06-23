@@ -147,6 +147,11 @@ class PolygonRendererState: MultiPathRendererState {
             }else {
                 render.updateGraphic(geometry, graphic: render.nonActiveGeometryGraphic!)
             }
+        }else {
+            if render.nonActiveGeometryGraphic != nil {
+                render.removeGraphic(render.nonActiveGeometryGraphic!)
+                render.nonActiveGeometryGraphic = nil
+            }
         }
     }
     

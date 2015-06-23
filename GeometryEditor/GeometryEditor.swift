@@ -246,7 +246,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     
     private let DISTANCE_PER_DEGREE:Double = 111000
     public func bufferGeometryInternal(geometry:AGSGeometry)->AGSMutablePolygon? {
-        if !isBufferEnable {
+        if !isBufferEnable || !geometry.isValid(){
             return nil
         }
         var engine = AGSGeometryEngine.defaultGeometryEngine()
@@ -381,9 +381,10 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
     }
     
     public func getGeometry()->AGSGeometry {
-        var bufferGeometry = getBufferGeometry()
-        if isBufferEnable && bufferGeometry != nil {
-            return bufferGeometry!
+        if isBufferEnable  {
+            if let bufferGeometry = getBufferGeometry() {
+                return bufferGeometry
+            }
         }
         return core.getGeometry()
     }

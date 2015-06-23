@@ -379,7 +379,14 @@ class PointInputView:UIView {
     
     var padding = 5
     
-    var mapView:AGSMapView?
+    var mapView:AGSMapView? {
+        didSet {
+            if let point = self.mapView?.visibleAreaEnvelope.center {
+                xValueTextField.text = "\(point.x)"
+                yValueTextField.text = "\(point.y)"
+            }
+        }
+    }
     
     var point:AGSPoint? {
         if let spatialReference = self.mapView?.spatialReference {

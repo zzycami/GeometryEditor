@@ -112,9 +112,7 @@ class GeometryEditorCore: NSObject {
     }
     
     func clear() {
-        if nonActiveGeometry != nil {
-            nonActiveGeometry = AGSGeometry(spatialReference: spatialReference)
-        }
+        nonActiveGeometry = nil
         ringEditor.reset()
         coreHistoryStack.removeAll(keepCapacity: false)
     }
