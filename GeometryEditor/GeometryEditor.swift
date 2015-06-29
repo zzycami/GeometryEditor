@@ -408,26 +408,13 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
         geometryRender.refreshAll()
     }
     
-    //MARK: Private Method
-    private func cancelSelectInternal()->Bool {
-        if state != GeometryEditState.Insert && state != GeometryEditState.Move {
-            return false
-        }
-        state = GeometryEditState.Normal
-        selectionPointIndex = -1
-        return true
-    }
-    
-    private func resetData() {
-        core.clear()
-        geometryRender.clear()
-    }
-    
-    private func setupBasicControlPanel() {
+    public func setupControlPanel(controlPanel:ControlPanel) {
         if self.mapView != nil {
-            var controlPanel = BasicControlPanel()
-            controlPanel.bindSketchGraphicLayer(self)
+            if self.controlPanel != nil {
+                self.controlPanel?.controlPanelView?.removeFromSuperview()
+            }
             
+            controlPanel.bindSketchGraphicLayer(self)
             self.mapView.addSubview(controlPanel.controlPanelView!)
             var size = self.mapView.frame.size
             var width = controlPanel.getControlPanelWidth()
@@ -448,5 +435,24 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             
             self.controlPanel = controlPanel
         }
+    }
+    
+    //MARK: Private Method
+    private func cancelSelectInternal()->Bool {
+        if state != GeometryEditState.Insert && state != GeometryEditState.Move {
+            return false
+        }
+        state = GeometryEditState.Normal
+        selectionPointIndex = -1
+        return true
+    }
+    
+    private func resetData() {
+        core.clear()
+        geometryRender.clear()
+    }
+    
+    public func setupBasicControlPanel() {
+        setupControlPanel(BasicControlPanel())
     }
 }

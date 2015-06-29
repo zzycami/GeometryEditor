@@ -9,9 +9,9 @@
 import UIKit
 
 public class ControlPanel: NSObject, GeometryEditorCallback {
-    var sketchGraphicsLayer:SketchGraphicsLayer!
+    public var sketchGraphicsLayer:SketchGraphicsLayer!
     
-    var controlPanelView:UIView?
+    public var controlPanelView:UIView?
     
     public var visible:Bool = false {
         didSet {
@@ -53,4 +53,13 @@ public class ControlPanel: NSObject, GeometryEditorCallback {
     
     public func showHandDrawPanel(show:Bool) {
     }
+    
+    public func getControlPanelHeight()->CGFloat {
+        return 0
+    }
+    
+    public func getControlPanelWidth()->CGFloat {
+        return 0
+    }
+    
 }

@@ -8,7 +8,14 @@
 
 import UIKit
 
-public class BasicControlPanel:ControlPanel, LocationUtilsDelegate{
+@objc
+public enum BasicControlPanelStyle:Int {
+    case Acquisition
+    case Normal
+    case Simple
+}
+
+public class BasicControlPanel:ControlPanel, LocationUtilsDelegate, CutManagerCallback {
     public var deselectBtn:UIButton = UIButton(frame: CGRectZero)
     private var deselectLabel:UILabel = UILabel(frame: CGRectZero)
     
@@ -51,13 +58,51 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate{
     private var handDrawClearBtn:UIButton = UIButton(frame: CGRectZero)
     private var handDrawClearLabel:UILabel = UILabel(frame: CGRectZero)
     
+    public var cutBtn:UIButton = UIButton(frame: CGRectZero)
+    private var cutLabel:UILabel = UILabel(frame: CGRectZero)
+    
+    public var mergeBtn:UIButton = UIButton(frame: CGRectZero)
+    private var mergeLabel:UILabel = UILabel(frame: CGRectZero)
+    
+    public var nearLineBtn:UIButton = UIButton(frame: CGRectZero)
+    private var nearLineLabel:UILabel = UILabel(frame: CGRectZero)
+    
     private var locationUtils:LocationUtils!
     private var isSingleLocating = false
     private var isPathRecord = false
+    public var acquisitionCutManager:AcquisitionCutManager?
+    public var acquisitionMergeManager:AcquisitionMergeManager?
+    
+    public var style:BasicControlPanelStyle = BasicControlPanelStyle.Normal {
+        didSet {
+            if oldValue != self.style {
+                if style == BasicControlPanelStyle.Acquisition {
+                    self.buttons = [undoBtn, mergeAddBtn, mergeSubtractBtn,  deselectBtn, removeBtn, coordinateInputBtn, gpsBtn, pathRecordBtn,handDrawBtn, bufferBtn, cutBtn, mergeBtn]
+                    self.labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, coordinateInputLabel, gpsLabel, pathRecordLabel,handDrawLabel, bufferLabel, cutLabel, mergeLabel]
+                }else if style == BasicControlPanelStyle.Normal {
+                    self.buttons = [undoBtn, mergeAddBtn, mergeSubtractBtn,  deselectBtn, removeBtn, coordinateInputBtn, gpsBtn, pathRecordBtn,handDrawBtn]
+                    self.labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, coordinateInputLabel, gpsLabel, pathRecordLabel,handDrawLabel, bufferLabel]
+                    self.cutBtn.removeFromSuperview()
+                    self.cutLabel.removeFromSuperview()
+                    self.mergeBtn.removeFromSuperview()
+                    self.mergeLabel.removeFromSuperview()
+                    self.nearLineBtn.removeFromSuperview()
+                    self.nearLineLabel.removeFromSuperview()
+                }
+                
+                setupConstrains(buttons, labels: labels, containerView: btnContainer)
+            }
+        }
+    }
     
     public init() {
         super.init(controlPanelView: nil)
         setupView()
+    }
+    
+    public override func onStop() {
+        super.onStop()
+        setCutStart(false)
     }
     
     override func bindSketchGraphicLayer(sketchGraphicsLayer: SketchGraphicsLayer) {
@@ -69,11 +114,23 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate{
     private var buttons:[UIButton] = []
     private var labels:[UILabel] = []
     
+    public func addButton(button:UIButton, label:UILabel) {
+        buttons.append(button)
+        labels.append(label)
+    }
+    
+    public func removeButton(button:UIButton, label:UILabel) {
+        if let index1 = find(self.buttons, button), let index2 = find(self.labels, label) {
+            self.buttons.removeAtIndex(index1)
+            self.labels.removeAtIndex(index2)
+        }
+    }
+    
     public var padding:CGFloat = 5
     
     public let buttonWidth:CGFloat = 45
     
-    private func setupView() {
+    public func setupView() {
         buttons = [undoBtn, mergeAddBtn, mergeSubtractBtn,  deselectBtn, removeBtn, coordinateInputBtn, gpsBtn, pathRecordBtn,handDrawBtn, bufferBtn]
         
         labels = [undoLabel, mergeAddLabel, mergeSubtractLabel,  deselectLabel, removeLabel, coordinateInputLabel, gpsLabel, pathRecordLabel,handDrawLabel, bufferLabel]
@@ -162,9 +219,24 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate{
         bufferBtn.setImage(UIImage(named: "icon_control_oval"), forState: UIControlState.Normal)
         bufferBtn.addTarget(self, action: "buffer:", forControlEvents: UIControlEvents.TouchUpInside)
         bufferLabel.text = "缓冲区"
+        
+        cutBtn.setImage(UIImage(named: "icon_control_cut"), forState: UIControlState.Normal)
+        cutBtn.addTarget(self, action: "geometryCut:", forControlEvents: UIControlEvents.TouchUpInside)
+        cutLabel.text = "分割"
+        addButton(cutBtn, label: cutLabel)
+        
+        mergeBtn.setImage(UIImage(named: "icon_control_merge"), forState: UIControlState.Normal)
+        mergeBtn.addTarget(self, action: "geometryMerge:", forControlEvents: UIControlEvents.TouchUpInside)
+        mergeLabel.text = "合并"
+        addButton(mergeBtn, label: mergeLabel)
+        
+        nearLineBtn.setImage(UIImage(named: "icon_control_sorption"), forState: UIControlState.Normal)
+        nearLineBtn.addTarget(self, action: "setNearLine:", forControlEvents: UIControlEvents.TouchUpInside)
+        nearLineLabel.text = "吸附线"
+        addButton(nearLineBtn, label: nearLineLabel)
     }
     
-    private func setupConstrains(buttons:[UIButton], labels:[UILabel], containerView:UIView) {
+    public func setupConstrains(buttons:[UIButton], labels:[UILabel], containerView:UIView) {
         var prevView:UIView?
         for i in 0..<(buttons.count) {
             var button = buttons[i]
@@ -175,7 +247,7 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate{
             button.setBackgroundImage(UIImage(named: "background_control_selecte"), forState: UIControlState.Selected)
             
             containerView.addSubview(button)
-            button.snp_makeConstraints({ (make) -> Void in
+            button.snp_remakeConstraints({ (make) -> Void in
                 if let view = prevView {
                     make.leading.equalTo(view.snp_trailing).offset(self.padding)
                 }else {
@@ -192,19 +264,19 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate{
             label.textAlignment = NSTextAlignment.Center
             
             containerView.addSubview(label)
-            label.snp_makeConstraints({ (make) -> Void in
+            label.snp_remakeConstraints({ (make) -> Void in
                 make.centerX.equalTo(button)
                 make.top.equalTo(button.snp_bottom)
             })
         }
     }
     
-    public func getControlPanelHeight()->CGFloat {
+    public override func getControlPanelHeight()->CGFloat {
         return 60
     }
     
-    public func getControlPanelWidth()->CGFloat {
-        var width:CGFloat = CGFloat(buttons.count)*buttonWidth + CGFloat(buttons.count - 1)*padding
+    public override func getControlPanelWidth()->CGFloat {
+        var width:CGFloat = CGFloat(buttons.count + 3)*buttonWidth + CGFloat(buttons.count + 2)*padding
         return width
     }
     
@@ -327,6 +399,71 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate{
     
     public func handDrawClear(sender:UIButton) {
         sketchGraphicsLayer.handDrawModule?.clear()
+    }
+    
+    public func geometryCut(sender:UIButton) {
+        setCutStart(!sender.selected)
+    }
+    
+    private func setCutStart(start:Bool) {
+        if let acquisitionCutManager = self.acquisitionCutManager {
+            acquisitionCutManager.cutCallback = self
+            if start {
+                acquisitionCutManager.start(sketchGraphicsLayer.getGeometry())
+                setAllButtonEnable(false)
+                self.cutBtn.enabled = true
+                self.cutBtn.selected = true
+            }else {
+                acquisitionCutManager.stop()
+                setAllButtonEnable(true)
+                 self.cutBtn.selected = false
+            }
+        }
+    }
+    
+    public var cutCallback:CutManagerCallback?
+    
+    public func onCut(geometry1: AGSGeometry, geometry2: AGSGeometry) {
+        var alertViewController = SDCAlertController(title: "分割", message: "确定分割?", preferredStyle: SDCAlertControllerStyle.Alert)
+        var cancelAction = SDCAlertAction(title: "取消", style: SDCAlertActionStyle.Cancel) { (alertAction:SDCAlertAction!) -> Void in
+            self.setCutStart(false)
+        }
+        
+        var finishAction = SDCAlertAction(title: "确定", style: SDCAlertActionStyle.Default) { (alertAction:SDCAlertAction!) -> Void in
+            self.setCutStart(false)
+            if self.cutCallback != nil {
+                self.sketchGraphicsLayer.setGeometry(geometry1)
+                self.cutCallback?.onCut(geometry1, geometry2: geometry2)
+            }
+        }
+        
+        alertViewController.addAction(cancelAction)
+        alertViewController.addAction(finishAction)
+        
+        alertViewController.presentWithCompletion(nil)
+    }
+    
+    public func setMergeStart(start:Bool) {
+        if let mergeManager = self.acquisitionMergeManager {
+            if start {
+                mergeManager.start(sketchGraphicsLayer.getGeometry())
+                setAllButtonEnable(false)
+                self.mergeBtn.enabled = true
+                self.mergeBtn.selected = true
+            } else {
+                mergeManager.finish()
+                setAllButtonEnable(true)
+                self.mergeBtn.selected = false
+            }
+        }
+    }
+    
+    public func geometryMerge(sender:UIButton) {
+        setMergeStart(!sender.selected)
+    }
+    
+    public func setNearLine(sender:UIButton) {
+        sender.selected = !sender.selected
     }
     
     public override func showHandDrawPanel(show: Bool) {
