@@ -174,6 +174,7 @@ public class SketchGraphicsLayer: AGSGraphicsLayer, AGSMapViewTouchDelegate {
             state = GeometryEditState.Insert
             selectionPointIndex = index + 1
         }
+        self.controlPanel?.onSelectPoint()
         geometryRender.refreshActiveSelectionPoint()
         return true
     }

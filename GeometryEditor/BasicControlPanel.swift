@@ -104,11 +104,20 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate, CutManagerCa
         super.onStop()
         setCutStart(false)
     }
+
     
     override func bindSketchGraphicLayer(sketchGraphicsLayer: SketchGraphicsLayer) {
         super.bindSketchGraphicLayer(sketchGraphicsLayer)
         locationUtils = LocationUtils(mapView: sketchGraphicsLayer.mapView)
         locationUtils.delegate = self
+        
+        self.removeBtn.enabled = false
+        self.deselectBtn.enabled = false
+    }
+    
+    public override func onSelectPoint() {
+        self.removeBtn.enabled = true
+        self.deselectBtn.enabled = true
     }
     
     private var buttons:[UIButton] = []
@@ -271,6 +280,8 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate, CutManagerCa
         }
     }
     
+    
+    
     public override func getControlPanelHeight()->CGFloat {
         return 60
     }
@@ -282,6 +293,8 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate, CutManagerCa
     
     public func cancelSelect(sender:UIButton) {
         sketchGraphicsLayer.cancelSelect()
+        self.deselectBtn.enabled = false
+        self.removeBtn.enabled = false
     }
     
     public func undo(sender:UIButton) {
@@ -290,6 +303,8 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate, CutManagerCa
     
     public func removeCurSelect(sender:UIButton) {
         sketchGraphicsLayer.removeCurSelect()
+        self.removeBtn.enabled = false
+        self.deselectBtn.enabled = false
     }
     
     public func singleGps(sender:UIButton) {

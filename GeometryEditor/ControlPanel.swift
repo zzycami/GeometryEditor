@@ -47,6 +47,9 @@ public class ControlPanel: NSObject, GeometryEditorCallback {
         
     }
     
+    public func onSelectPoint() {
+    }
+    
     public func onStateChange(oldState: GeometryEditState, updateState: GeometryEditState) {
         
     }
