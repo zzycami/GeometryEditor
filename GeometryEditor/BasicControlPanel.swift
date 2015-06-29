@@ -232,17 +232,14 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate, CutManagerCa
         cutBtn.setImage(UIImage(named: "icon_control_cut"), forState: UIControlState.Normal)
         cutBtn.addTarget(self, action: "geometryCut:", forControlEvents: UIControlEvents.TouchUpInside)
         cutLabel.text = "分割"
-        addButton(cutBtn, label: cutLabel)
         
         mergeBtn.setImage(UIImage(named: "icon_control_merge"), forState: UIControlState.Normal)
         mergeBtn.addTarget(self, action: "geometryMerge:", forControlEvents: UIControlEvents.TouchUpInside)
         mergeLabel.text = "合并"
-        addButton(mergeBtn, label: mergeLabel)
         
         nearLineBtn.setImage(UIImage(named: "icon_control_sorption"), forState: UIControlState.Normal)
         nearLineBtn.addTarget(self, action: "setNearLine:", forControlEvents: UIControlEvents.TouchUpInside)
         nearLineLabel.text = "吸附线"
-        addButton(nearLineBtn, label: nearLineLabel)
     }
     
     public func setupConstrains(buttons:[UIButton], labels:[UILabel], containerView:UIView) {
