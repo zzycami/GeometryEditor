@@ -115,6 +115,23 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate, CutManagerCa
         self.deselectBtn.enabled = false
     }
     
+    public override func onStart() {
+        super.onStart()
+        self.removeBtn.enabled = false
+        self.deselectBtn.enabled = false
+        
+        if sketchGraphicsLayer.currentMode == GeometryTypeMode.Point {
+            self.mergeAddBtn.enabled = false
+            self.mergeSubtractBtn.enabled = false
+        }else if sketchGraphicsLayer.currentMode == GeometryTypeMode.Polyline {
+            self.mergeSubtractBtn.enabled = false
+            self.mergeAddBtn.enabled = true
+        }else if sketchGraphicsLayer.currentMode == GeometryTypeMode.Polygon {
+            self.mergeSubtractBtn.enabled = true
+            self.mergeAddBtn.enabled = true
+        }
+    }
+    
     public override func onSelectPoint() {
         self.removeBtn.enabled = true
         self.deselectBtn.enabled = true
@@ -329,7 +346,7 @@ public class BasicControlPanel:ControlPanel, LocationUtilsDelegate, CutManagerCa
                     alertView.show()
                 }
             }else {
-                var alertView = UIAlertView(title: "", message: "输入的数字必须是数字", delegate: nil, cancelButtonTitle: "确定")
+                var alertView = UIAlertView(title: "", message: "输入的必须是数字", delegate: nil, cancelButtonTitle: "确定")
                 alertView.show()
             }
         }

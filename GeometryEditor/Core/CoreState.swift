@@ -159,19 +159,32 @@ class PolylineState: NSObject, CoreState {
     func merge( core: GeometryEditorCore, mergeMode: GeometryMergeMode) -> Bool {
         core.addHistory()
         var engine = AGSGeometryEngine.defaultGeometryEngine()
-        core.nonActiveGeometry = engine.unionGeometries([core.nonActiveGeometry!, core.ringEditor.getPolyline()])
+        if let geometry = core.nonActiveGeometry {
+            core.nonActiveGeometry = engine.unionGeometries([geometry, core.ringEditor.getPolyline()])
+        }else {
+            core.nonActiveGeometry = core.ringEditor.getPolyline()
+        }
         core.ringEditor.reset()
         return true
     }
     
     func getGeometry( core: GeometryEditorCore, mergeMode: GeometryMergeMode) -> AGSGeometry {
-        var nonActiveGeometry = core.nonActiveGeometry as! AGSPolyline
+        var nonActiveGeometry = core.nonActiveGeometry as? AGSPolyline
         if core.ringEditor.isEmpty() {
-            return nonActiveGeometry.copy() as! AGSGeometry
+            if let geometry = nonActiveGeometry {
+                return geometry.copy() as! AGSGeometry
+            }else {
+                return createGeometry(core.spatialReference)
+            }
         }
         
         var engine = AGSGeometryEngine.defaultGeometryEngine()
-        return engine.unionGeometries([nonActiveGeometry, core.ringEditor.getPolyline()])
+        if let geometry = nonActiveGeometry {
+            return engine.unionGeometries([geometry, core.ringEditor.getPolyline()])
+        }else {
+            return core.ringEditor.getPolyline();
+        }
+        
     }
     
     func setGeometry( core: GeometryEditorCore, geometry: AGSGeometry) -> Bool {
@@ -262,7 +275,7 @@ class MultiPointState: NSObject, CoreState {
     }
     
     func checkGeometry(geometry: AGSGeometry) -> Bool {
-        return false
+        return geometry.isValid() && geometry.isKindOfClass(AGSMultipoint)
     }
     
     func changeActivePath( core: GeometryEditorCore, pathIndex: Int) -> Bool {
